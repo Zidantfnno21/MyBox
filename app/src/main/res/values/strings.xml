@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyBox</string>
+    <string name="Hello">Greetings</string>
+    <string name="Opsi">Opsi</string>
+    <string name="ChangeProfile">Edit Item Picture</string>
+    <string name="ChangeBanner">Edit Category Picture</string>
+    <string name="backButton">Kembali</string>
+</resources>

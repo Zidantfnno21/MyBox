@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "648461706013",
+    "firebase_url": "https://mybox-1b6ea-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "mybox-1b6ea",
+    "storage_bucket": "mybox-1b6ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648461706013:android:093fd3daa45364349db7f4",
+        "android_client_info": {
+          "package_name": "com.example.mybox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648461706013-e5pm9p6fjvfd0vnr1g0l7f3641e35mhf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN063kN-Qojp0J680ASBVpgQLTLS9y4P0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648461706013-e5pm9p6fjvfd0vnr1g0l7f3641e35mhf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
