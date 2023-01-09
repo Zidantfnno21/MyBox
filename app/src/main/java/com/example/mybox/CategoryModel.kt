@@ -1,13 +1,15 @@
 package com.example.mybox
 
+import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.android.gms.tasks.Task
 
 data class CategoryModel(
-    var Id: String? = null,
-    var Name: String? = null,
-    var Description: String? = null,
-    var ImageURL: String? = null,
+    val Id : String? = null ,
+    val Name : String? = null ,
+    val Description : String? = null ,
+    val ImageURL :String? = null ,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
