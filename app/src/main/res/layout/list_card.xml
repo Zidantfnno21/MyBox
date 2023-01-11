@@ -20,7 +20,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/ivRv"
             android:layout_width="match_parent"
             android:layout_height="124dp"
             android:scaleType="centerCrop"
@@ -67,7 +67,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/textViewCategoryCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
