@@ -85,12 +85,6 @@ class SecondActivity : AppCompatActivity() {
         }
         if (requestCode == 123 && resultCode == RESULT_OK) {
             if (data != null) {
-                //val values = ContentValues()
-                //values.put(MediaStore.Images.Media.TITLE, "New Pic")
-                //values.put(MediaStore.Images.Media.DESCRIPTION, "Camera")
-                //imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)!!
-
-
                 imageUri = data.data
                 try {
                     val imageBitmap =
@@ -100,28 +94,7 @@ class SecondActivity : AppCompatActivity() {
                 } catch (e : IOException) {
 
                 }
-
-
-                //val imageFile = createImageFile()
-                //val outputStream = FileOutputStream(imageUri)
-                //imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                //ivCategory.setImageBitmap(imageBitmap)
-                //
-
-
-                //val bitmap: Bitmap = data.extras?.get("data") as Bitmap
-
-                //bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-                //val file : String = Base64.getEncoder().toString()
-                //val bitmap:Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver,imageUri)
-                //val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri) as Bitmap
-                //ivCategory.setImageBitmap(bitmap)
-
-
             }
-
-            //var bitmapDrawable = BitmapDrawable(bitmap)
-
         }
     }
 
@@ -186,38 +159,3 @@ class SecondActivity : AppCompatActivity() {
     }
 
 }
-
-
-
-// private fun getCaptureImageOutputUri(): Uri? {
-// var outputFileUri: Uri? = null
-// val getImage: File? = externalCacheDir
-// if (getImage != null) {
-// outputFileUri = android.net.Uri.fromFile(File(getImage.getPath(), "profile.png"))
-// }
-// return outputFileUri
-// private fun showPictureDialog() {
-// val pictureDialog = AlertDialog.Builder(this)
-// pictureDialog.setTitle("Select Action")
-// val pictureDialogItems = arrayOf("Select From Gallery")
-// pictureDialog.setItems(pictureDialogItems){
-// dialog, which ->
-// when (which) {
-// 0 -> choosePhotoFromGallary()
-// }
-// }
-// pictureDialog.show()
-// }
-//
-// //    private fun takePhotoFromCamera() {
-// //        val values = ContentValues()
-// //        values.put(MediaStore.Images.Media.TITLE, "New Pic")
-// //        values.put(MediaStore.Images.Media.DESCRIPTION, "Camera")
-// //        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)!!
-// //        val openCamera = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-// //        openCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-// //        startActivityForResult(openCamera, 123)
-// //        openCamera.type = "image/*"
-// //    }
-//
-// */
