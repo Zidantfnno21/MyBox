@@ -139,9 +139,9 @@ class SecondActivity : AppCompatActivity() {
                     val categoryId = dbReference.push().key !!
                     val category = CategoryModel(categoryId , storageName , storageDesc , imageUri.toString())
                     dbReference.child(categoryId).setValue(category).addOnCompleteListener {
-                        Toast.makeText(applicationContext, "Berhasil cok", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Berhasil", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener{
-                        Toast.makeText(applicationContext, "Gabisa cok", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Gabisa", Toast.LENGTH_SHORT).show()
                     }
                 }
                 LinearLayout.visibility = View.GONE
