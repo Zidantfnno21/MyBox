@@ -13,8 +13,8 @@ import com.example.mybox.data.model.DetailModel
 @Dao
 interface DetailsBoxDao {
 
-    @RawQuery(observedEntities = [DetailModel::class])
-    fun getAllDetailsBox(query : SupportSQLiteQuery): LiveData<DetailModel>
+    @Query("SELECT * FROM boxDetails WHERE categoryId = :categoryId ")
+    fun getAllDetailsBox(categoryId: Int): LiveData<DetailModel>
 
     @Query("SELECT * FROM boxDetails where id = :boxId")
     fun getBoxById(boxId: Int) : LiveData<DetailModel>

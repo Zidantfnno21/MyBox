@@ -13,4 +13,5 @@ data class CategoryModel(
     val Name : String,
     val Description : String ,
     val ImageURL : String ,
+    val item: List<DetailModel> = emptyList() ,
 ) : Parcelable

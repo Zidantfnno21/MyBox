@@ -1,4 +1,4 @@
-package com.example.mybox
+package com.example.mybox.ui
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,17 +6,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mybox.R
 import com.squareup.picasso.Picasso
 
 class BoxAdapter(private val boxList: List<CategoryModel>, private val adapterOnClick: (CategoryModel) -> Unit) : RecyclerView.Adapter<BoxAdapter.BoxrHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): BoxrHolder {
-        return BoxrHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.list_card, viewGroup, false))
+        return BoxrHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.list_card , viewGroup , false))
     }
 
     override fun getItemCount(): Int = boxList.size
 
-    override fun onBindViewHolder(holder: BoxrHolder, position: Int) {
+    override fun onBindViewHolder(holder: BoxrHolder , position: Int) {
         holder.bindHero(boxList[position])
     }
 

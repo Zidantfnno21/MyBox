@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MyBox"
 
         >
-        <activity android:name=".SplashScreen"
+        <activity android:name=".ui.SplashScreen"
             android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>
@@ -24,27 +24,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/NoTitleTheme"
             android:exported="true">
 
         </activity>
-        <activity android:name=".AddActivity"
+        <activity android:name=".ui.AddActivity"
             android:theme="@style/NoTitleTheme"
             android:exported="false">
         </activity>
 
-        <activity android:name=".SecondActivity"
+        <activity android:name=".ui.SecondActivity"
             android:theme="@style/NoTitleTheme"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
-        <activity android:name=".InsideActivity"
+        <activity android:name=".ui.InsideActivity"
             android:theme="@style/NoTitleTheme"
             android:exported="false">
 
         </activity>
-        <activity android:name=".ItemActivity"
+        <activity android:name=".ui.ItemActivity"
             android:theme="@style/NoTitleTheme"
             android:exported="false">
 

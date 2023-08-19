@@ -1,4 +1,4 @@
-package com.example.mybox.adapter
+package com.example.mybox.ui.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater

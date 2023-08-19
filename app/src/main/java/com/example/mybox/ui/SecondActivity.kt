@@ -1,7 +1,5 @@
-package com.example.mybox
+package com.example.mybox.ui
 
-import android.R.attr.data
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -13,8 +11,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
-import com.example.mybox.data.model.CategoryModel
+import com.example.mybox.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -130,31 +127,6 @@ class SecondActivity : AppCompatActivity() {
 
     }
 
-    private fun saveCategoryData() {
-        StorageReference.putFile(imageUri)
-            .addOnSuccessListener {
-                StorageReference.downloadUrl.addOnCompleteListener{
-                    val storageName = etCategory.text.toString()
-                    val storageDesc = etDescription.text.toString()
-                    val categoryId = dbReference.push().key !!
-                    val category = CategoryModel(categoryId , storageName , storageDesc , imageUri.toString())
-                    dbReference.child(categoryId).setValue(category).addOnCompleteListener {
-                        Toast.makeText(applicationContext, "Berhasil", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener{
-                        Toast.makeText(applicationContext, "Gabisa", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                LinearLayout.visibility = View.GONE
-                Toast.makeText(applicationContext , "Image Uploaded" , Toast.LENGTH_SHORT)
-                    .show()
-                val intent = Intent(this@SecondActivity , InsideActivity::class.java)
-                startActivity(intent)
-                finish()
-            }.addOnFailureListener {
-                Toast.makeText(applicationContext , "gabisa ini mas" , Toast.LENGTH_SHORT)
-                    .show()
-            }
-    }
 
 }
 

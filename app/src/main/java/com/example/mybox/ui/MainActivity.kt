@@ -1,14 +1,12 @@
-package com.example.mybox
+package com.example.mybox.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ListAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mybox.adapter.BoxAdapter
+import com.example.mybox.R
 import com.example.mybox.data.model.CategoryModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*

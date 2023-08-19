@@ -9,7 +9,8 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "boxDetails")
 data class DetailModel(
     @PrimaryKey(autoGenerate = true)
-    val id : Int,
+    val id: Int,
+    val categoryId : Int,
     val Name : String,
     val timeStamp : Long ,
     val ImageURL : String

@@ -1,7 +1,8 @@
-package com.example.mybox
+package com.example.mybox.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mybox.R
 
 class ItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

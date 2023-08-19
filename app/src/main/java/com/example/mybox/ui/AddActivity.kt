@@ -1,10 +1,11 @@
-package com.example.mybox
+package com.example.mybox.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mybox.R
 import com.example.mybox.data.model.CategoryModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
