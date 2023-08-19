@@ -9,11 +9,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMainPage"
-        tools:listitem="@layout/list_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/CardView"
-        >
+        tools:listitem="@layout/list_card">
 
     </androidx.recyclerview.widget.RecyclerView>
 
