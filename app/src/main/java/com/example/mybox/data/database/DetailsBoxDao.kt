@@ -6,8 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RawQuery
-import androidx.sqlite.db.SupportSQLiteQuery
+import androidx.room.Update
 import com.example.mybox.data.model.DetailModel
 
 @Dao
@@ -20,8 +19,11 @@ interface DetailsBoxDao {
     fun getBoxById(boxId: Int) : LiveData<DetailModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewBox(newBox: DetailModel) : Long
+    fun insertBox(newBox : MutableList<DetailModel>) : Long
 
     @Delete
     fun deleteBox(box: DetailModel)
+
+    @Update
+    fun updateBox(box: DetailModel)
 }

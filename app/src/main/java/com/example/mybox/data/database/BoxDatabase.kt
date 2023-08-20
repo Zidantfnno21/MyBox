@@ -17,11 +17,11 @@ abstract class BoxDatabase: RoomDatabase() {
     abstract fun detailDao(): DetailsBoxDao
 
     companion object{
-
         @Volatile
         private var INSTANCE: BoxDatabase? = null
 
-        fun getInstance(context : Context): BoxDatabase {
+        @JvmStatic
+        fun getDatabase(context : Context): BoxDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

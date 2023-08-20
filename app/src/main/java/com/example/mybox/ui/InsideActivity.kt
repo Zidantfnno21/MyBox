@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mybox.R
+import com.example.mybox.ui.mainScreen.MainActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class InsideActivity : AppCompatActivity() {
