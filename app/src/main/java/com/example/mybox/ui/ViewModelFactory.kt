@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mybox.data.BoxRepository
 import com.example.mybox.ui.mainScreen.MainViewModel
+import com.example.mybox.utils.Injection
 
 class ViewModelFactory private constructor(private val boxRepository : BoxRepository): ViewModelProvider.NewInstanceFactory(){
     override fun <T : ViewModel> create(modelClass : Class<T>) : T {

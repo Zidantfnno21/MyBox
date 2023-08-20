@@ -5,4 +5,5 @@
     <string name="ChangeProfile">Edit Item Picture</string>
     <string name="ChangeBanner">Edit Category Picture</string>
     <string name="backButton">Kembali</string>
+    <string name="box_deleted">Box Deleted</string>
 </resources>

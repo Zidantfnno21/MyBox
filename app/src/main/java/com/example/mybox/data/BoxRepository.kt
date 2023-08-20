@@ -56,7 +56,7 @@ class BoxRepository(
 
     }
 
-    suspend fun addNewCategories(category: CategoryModel) {
+   suspend fun addNewCategories(category: CategoryModel) {
         try {
             val categoryRef = database.push()
             categoryRef.setValue(category).await()

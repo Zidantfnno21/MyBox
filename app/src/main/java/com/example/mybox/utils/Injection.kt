@@ -1,4 +1,4 @@
-package com.example.mybox.ui
+package com.example.mybox.utils
 
 import android.content.Context
 import com.example.mybox.data.BoxRepository

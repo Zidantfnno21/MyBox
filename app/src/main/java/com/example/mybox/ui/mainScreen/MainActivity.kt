@@ -1,55 +1,109 @@
 package com.example.mybox.ui.mainScreen
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mybox.R
+import com.example.mybox.data.Result
 import com.example.mybox.data.model.CategoryModel
+import com.example.mybox.databinding.ActivityMainBinding
+import com.example.mybox.ui.InsideActivity
 import com.example.mybox.ui.SecondActivity
 import com.example.mybox.ui.ViewModelFactory
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
+import com.example.mybox.utils.BOX_ID
+import com.example.mybox.utils.Event
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var floatingActionButton: FloatingActionButton
-    private lateinit var recyclerView: RecyclerView
-    private val list = ArrayList<CategoryModel>()
-    private val mainViewModel by viewModels<MainViewModel> {
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var mainAdapter : MainScreenAdapter
+    private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(application)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        floatingActionButton = findViewById(R.id.fAB1)
 
-        recyclerView = findViewById(R.id.rvMainPage)
-        recyclerView.setHasFixedSize(true)
+        mainAdapter = MainScreenAdapter { box->
+            val intent = Intent(this@MainActivity, InsideActivity::class.java)
+            intent.putExtra(BOX_ID, box.Id)
+            startActivity(intent)
+        }
+        binding.rvMainPage.apply {
+            setHasFixedSize(false)
+            smoothScrollToPosition(0)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = mainAdapter
+        }
 
-        floatingActionButton.setOnClickListener{
+        initAction()
+
+        viewModel.getBox().observe(this) {boxList->
+            if (boxList != null) {
+                when(boxList) {
+                    is Result.Loading -> {
+
+                    }
+                    is Result.Success -> {
+                        val list =  boxList.data
+                        mainAdapter.submitList(list)
+                    }
+                    is Result.Error -> {
+
+                    }
+                }
+            }
+        }
+
+        viewModel.snackbarText.observe(this) {
+            showSnackBar(it)
+        }
+
+        binding.fAB1.setOnClickListener {
             startActivity(Intent(this@MainActivity, SecondActivity::class.java))
-
         }
     }
-//
-//    private fun showRecyclerList() {
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        val listBoxAdapter =
-//
-//    }
-//
-//    private fun getListBox() : ArrayList<CategoryModel> {
-//        val dataName = resources.getStringArray()
-//        val dataDescription = resources.getStringArray()
-//        val listBox = ArrayList<CategoryModel>()
-//        for (i in dataName.indices) {
-//            val box = CategoryModel
-//        }
-//        return listBox
-//    }
+    private fun showSnackBar(eventMessage: Event<Int>) {
+        val message = eventMessage.getContentIfNotHandled() ?: return
+        Snackbar.make(
+            findViewById(R.id.relativeLayoutMain) ,
+            getString(message) ,
+            Snackbar.LENGTH_SHORT
+        ).setAction("Undo"){
+            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel)
+        }.show()
+    }
+
+    private fun initAction() {
+        val itemTouchHelper = ItemTouchHelper(object  : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView : RecyclerView ,
+                viewHolder : RecyclerView.ViewHolder
+            ) : Int {
+                return makeMovementFlags(0, ItemTouchHelper.ACTION_STATE_SWIPE)
+            }
+
+            override fun onMove(
+                recyclerView : RecyclerView ,
+                viewHolder : RecyclerView.ViewHolder ,
+                target : RecyclerView.ViewHolder
+            ) : Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder : RecyclerView.ViewHolder , direction : Int) {
+                val box = (viewHolder as MainScreenAdapter.ListViewHolder).getBox
+                viewModel.deleteBox(box)
+            }
+
+        })
+        itemTouchHelper.attachToRecyclerView(binding.rvMainPage)
+    }
 }
