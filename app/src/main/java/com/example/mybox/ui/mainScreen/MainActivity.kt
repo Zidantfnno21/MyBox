@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             getString(message) ,
             Snackbar.LENGTH_SHORT
         ).setAction("Undo"){
-            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel, imageFile = )
+//            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel)
         }.show()
     }
 
