@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MyBox"
 
         >
-        <activity android:name=".ui.SplashScreen"
+        <activity android:name=".ui.splashScreen.SplashScreen"
             android:theme="@style/SplashTheme"
             android:exported="true">
             <intent-filter>

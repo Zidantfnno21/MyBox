@@ -1,4 +1,4 @@
-package com.example.mybox.ui
+package com.example.mybox.ui.splashScreen
 
 import android.content.Intent
 import android.os.Bundle

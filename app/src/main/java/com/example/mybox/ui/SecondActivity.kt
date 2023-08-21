@@ -38,7 +38,7 @@ class SecondActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add2)
+        setContentView(R.layout.activity_category_add)
         btChangePic = findViewById(R.id.btChangePic)
         etCategory = findViewById(R.id.etTitle)
         etDescription = findViewById(R.id.etDesc)

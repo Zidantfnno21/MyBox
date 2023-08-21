@@ -15,7 +15,7 @@ class InsideActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_inside)
+        setContentView(R.layout.activity_category_detail)
         floatingActionButton = findViewById(R.id.floatingActionButton2)
         optionButton = findViewById(R.id.iB6)
         backButton = findViewById(R.id.btImageBack)

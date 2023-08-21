@@ -2,8 +2,10 @@ package com.example.mybox.ui.mainScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         mainAdapter = MainScreenAdapter { box->
             val intent = Intent(this@MainActivity, InsideActivity::class.java)
             intent.putExtra(BOX_ID, box.Id)
@@ -48,15 +49,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.getBox().observe(this) {boxList->
             if (boxList != null) {
                 when(boxList) {
-                    is Result.Loading -> {
-
-                    }
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
                     is Result.Success -> {
+                        showLoading(false)
                         val list =  boxList.data
                         mainAdapter.submitList(list)
                     }
                     is Result.Error -> {
-
+                        showLoading(false)
+                        Toast.makeText(this@MainActivity , "Whooopss! Failed to get ur BOX :(" , Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -79,6 +82,10 @@ class MainActivity : AppCompatActivity() {
         ).setAction("Undo"){
             viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel)
         }.show()
+    }
+
+    private fun showLoading(loading: Boolean) {
+        binding.progressBar.isVisible = loading
     }
 
     private fun initAction() {
