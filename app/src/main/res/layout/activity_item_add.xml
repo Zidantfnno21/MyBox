@@ -2,7 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/backButton"
+        android:background="#ffff"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,14 +26,16 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical" >
 
-            <ImageView
-                android:id="@+id/profilePicture3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/add_ivItem"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/rounded_shape"
-                android:scaleType="centerCrop"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:adjustViewBounds="true"
+                android:background="@color/primaryColor"
+                android:contentDescription="@string/ChangeBanner"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge" />
 
             <TextView
                 android:id="@+id/textView4"
@@ -38,68 +51,47 @@
                 android:textSize="14sp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginHorizontal="30dp"
-                android:visibility="visible"
-                >
+                app:boxStrokeWidthFocused="2dp"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Title">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    style="@style/CustomFormStyle"
+                    android:id="@+id/addItem_etTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/form_shape"
-                    android:fontFamily="@font/poppins"
-                    android:hint="astagfirullah" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/form_shape"
-                        style="@style/CustomFormStyle"
-                        android:hint="hint" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addItem_btSave"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="38dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="3dp"
-                android:orientation="horizontal"
-                android:visibility="visible">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="20dp"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:textAlignment="center"
+                app:cornerRadius="20dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16sp"
+                android:letterSpacing="0"
+                android:elegantTextHeight="true"
+                android:textFontWeight="600"
+                android:textColor="#FF000000"
+                android:backgroundTint="#4AC9E3"
+                android:textAllCaps="false"
+                android:text="Save" />
 
-                <Button
-                    android:id="@+id/button4"
-                    style="@style/CustomButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="6dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_shape"
-                    android:backgroundTint="#00FFFFFF"
-                    android:text="Back" />
-
-                <Button
-                    android:id="@+id/button5"
-                    style="@style/CustomButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="6dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/sec_button_shape"
-                    android:backgroundTint="#4AC9E3"
-                    android:text="Save" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

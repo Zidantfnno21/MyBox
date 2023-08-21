@@ -10,7 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom|end"
         android:layout_marginStart="20dp"
@@ -32,7 +31,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
-        android:id="@+id/testi"
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iVperItem"
@@ -59,14 +58,15 @@
             android:text="TextView" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tViewDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/testi"
-        android:layout_marginHorizontal="20dp"
-        android:fontFamily="@font/poppins"
-        android:textSize="14sp"
-        android:textColor="#000000"
-        android:text="TextView" />
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="50dp"
+        android:minWidth="48dp"
+        android:layout_height="50dp"
+        android:minHeight="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/backButton"
+        android:background="@drawable/button_background"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
 </RelativeLayout>

@@ -13,9 +13,9 @@ import com.example.mybox.R
 import com.example.mybox.data.Result
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.databinding.ActivityMainBinding
-import com.example.mybox.ui.InsideActivity
-import com.example.mybox.ui.SecondActivity
 import com.example.mybox.ui.ViewModelFactory
+import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
+import com.example.mybox.ui.detailScreen.CategoryDetailActivity
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.Event
 import com.google.android.material.snackbar.Snackbar
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mainAdapter = MainScreenAdapter { box->
-            val intent = Intent(this@MainActivity, InsideActivity::class.java)
+            val intent = Intent(this@MainActivity, CategoryDetailActivity::class.java)
             intent.putExtra(BOX_ID, box.Id)
             startActivity(intent)
         }
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.fAB1.setOnClickListener {
-            startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+            startActivity(Intent(this@MainActivity, AddCategoryActivity::class.java))
         }
     }
     private fun showSnackBar(eventMessage: Event<Int>) {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             getString(message) ,
             Snackbar.LENGTH_SHORT
         ).setAction("Undo"){
-            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel)
+            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel, imageFile = )
         }.show()
     }
 

@@ -1,6 +1,7 @@
 package com.example.mybox.data
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
@@ -9,7 +10,10 @@ import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
+import okhttp3.MultipartBody
 import java.lang.Exception
 import java.util.concurrent.ExecutorService
 
@@ -18,11 +22,12 @@ class BoxRepository(
     private val executor: ExecutorService
     ) {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+    private val storage: StorageReference = FirebaseStorage.getInstance().reference
 
     fun getAllBox(): LiveData<Result<List<CategoryModel>>> = liveData {
         emit(Result.Loading)
         try {
-            val snapshot = database.get().await()
+            val snapshot = database.child("Category").get().await()
             val boxs = snapshot.children.mapNotNull {
                 it.getValue(CategoryModel::class.java)
             }
@@ -34,33 +39,35 @@ class BoxRepository(
         }
     }
 
-    fun getAllDetailBox(): LiveData<Result<List<DetailModel>>> = liveData {
+    fun getAllDetailBox(categoryId : Int): LiveData<Result<List<DetailModel>>> = liveData {
         emit(Result.Loading)
         try{
-            val categorySnapshot = database.child("Category").get().await()
-            val categories = categorySnapshot.children.mapNotNull {
-                it.getValue(CategoryModel::class.java)
-            }
+            val categorySnapshot = database.child("Category").child(categoryId.toString()).child("item").get().await()
 
-            val detailItems = mutableListOf<DetailModel>()
-            for (category in categories) {
-                detailItems.addAll(category.item)
+            val detailItems = categorySnapshot.children.mapNotNull {
+                it.getValue(DetailModel::class.java)
             }
 
             emit(Result.Success(detailItems))
-            boxDatabase.detailDao().insertBox(detailItems)
+            boxDatabase.detailDao().insertBox(detailItems as MutableList<DetailModel>)
         }catch (e: Exception) {
             Log.e("BoxRepository", "getAllDetailBox: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
-
     }
 
-   suspend fun addNewCategories(category: CategoryModel) {
+   suspend fun addNewCategories(category: CategoryModel, fileImage: Uri) {
         try {
             val categoryRef = database.push()
             categoryRef.setValue(category).await()
 
+            val fileRef : StorageReference = FirebaseStorage.getInstance().getReference("category_images/${categoryRef.key}.jpg")
+            fileRef.putFile(fileImage).await()
+
+            val imageUrl = fileRef.downloadUrl.await().toString()
+            val updatedCategory = category.copy(ImageURL = imageUrl)
+
+            categoryRef.setValue(updatedCategory).await()
             boxDatabase.boxDao().insertBox(listOf(category))
 
             Log.d("BoxRepository", "New category added successfully.")
@@ -69,13 +76,19 @@ class BoxRepository(
         }
     }
 
-    suspend fun addNewDetailItem(categoryId: Int , newDetailItem: DetailModel) {
+    suspend fun addNewDetailItem(categoryId: Int , newDetailItem: DetailModel, fileImage : Uri) {
         try {
             val detailRef = database.child("Category").child(categoryId.toString())
             val itemRef = detailRef.child("item").push()
-
             itemRef.setValue(newDetailItem).await()
 
+            val fileRef: StorageReference = FirebaseStorage.getInstance().getReference("item_images/${itemRef.key}.jpg")
+            fileRef.putFile(fileImage).await()
+
+            val imageUrl = fileRef.downloadUrl.await().toString()
+            val updateDetailItem = newDetailItem.copy(ImageURL = imageUrl)
+
+            itemRef.setValue(updateDetailItem).await()
             boxDatabase.detailDao().insertBox(mutableListOf(newDetailItem))
 
             Log.d("BoxRepository", "Detail item added successfully")
@@ -96,5 +109,4 @@ class BoxRepository(
         }
     }
 
-    companion object
 }

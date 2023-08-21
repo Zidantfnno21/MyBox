@@ -1,5 +1,6 @@
 package com.example.mybox.ui.mainScreen
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,9 +20,9 @@ class MainViewModel(private val boxRepository : BoxRepository): ViewModel() {
 
     fun getBox() = boxRepository.getAllBox()
 
-    fun insert(box: CategoryModel) {
+    fun insert(box: CategoryModel, imageFile: Uri) {
         viewModelScope.launch {
-            boxRepository.addNewCategories(box)
+            boxRepository.addNewCategories(box, imageFile)
         }
     }
 
