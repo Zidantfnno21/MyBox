@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mybox.data.BoxRepository
 import com.example.mybox.ui.addCategoryScreen.AddCategoryViewModel
 import com.example.mybox.ui.addItemScreen.AddItemViewModel
+import com.example.mybox.ui.auth.loginScreen.LoginViewModel
+import com.example.mybox.ui.auth.registerScreen.RegisterViewModel
 import com.example.mybox.ui.detailScreen.CategoryDetailViewModel
 import com.example.mybox.ui.mainScreen.MainViewModel
 import com.example.mybox.utils.Injection
@@ -22,6 +24,10 @@ class ViewModelFactory private constructor(private val boxRepository : BoxReposi
             return AddItemViewModel(boxRepository) as T
         }else if (modelClass.isAssignableFrom(AddCategoryViewModel::class.java)){
             return AddCategoryViewModel(boxRepository) as T
+        }else if (modelClass.isAssignableFrom(LoginViewModel::class.java)){
+            return LoginViewModel(boxRepository) as T
+        }else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)){
+            return RegisterViewModel(boxRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

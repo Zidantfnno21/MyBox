@@ -1,6 +1,5 @@
 package com.example.mybox.data
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,13 +7,17 @@ import androidx.lifecycle.liveData
 import com.example.mybox.data.database.BoxDatabase
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
+import com.example.mybox.data.response.AuthResult
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
-import okhttp3.MultipartBody
-import java.lang.Exception
 import java.util.concurrent.ExecutorService
 
 class BoxRepository(
@@ -22,7 +25,45 @@ class BoxRepository(
     private val executor: ExecutorService
     ) {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
-    private val storage: StorageReference = FirebaseStorage.getInstance().reference
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    fun logIn(email: String, password: String) : LiveData<Result<AuthResult>> = liveData {
+        emit(Result.Loading)
+        try {
+            val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            if (authResult.user != null) {
+                emit(Result.Success(AuthResult.Success(auth.currentUser!!)))
+            } else {
+                emit(Result.Error("Authentication failed"))
+            }
+        }catch (e: Exception){
+            emit(Result.Error(handleAuthException(e)))
+        }
+    }
+
+    fun register(email: String, password: String) : LiveData<Result<AuthResult>> = liveData {
+        emit(Result.Loading)
+        try {
+            val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            if (authResult.user != null) {
+                emit(Result.Success(AuthResult.Success(auth.currentUser!!)))
+            } else {
+                emit(Result.Error("Registration Failed"))
+            }
+        }catch (e: Exception){
+            emit(Result.Error(handleAuthException(e)))
+        }
+    }
+
+    private fun handleAuthException(exception: Exception): String {
+        return when (exception) {
+            is FirebaseAuthInvalidUserException -> "Invalid user"
+            is FirebaseAuthInvalidCredentialsException -> "Invalid credentials"
+            is FirebaseAuthUserCollisionException -> "User already exists"
+            is FirebaseNetworkException -> "Network error"
+            else -> "Authentication failed: ${exception.message}"
+        }
+    }
 
     fun getAllBox(): LiveData<Result<List<CategoryModel>>> = liveData {
         emit(Result.Loading)
@@ -108,5 +149,4 @@ class BoxRepository(
             boxDatabase.detailDao().deleteBox(detailBox)
         }
     }
-
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mybox">
 
     <uses-feature
@@ -33,6 +32,15 @@
         <activity
             android:name=".ui.auth.loginScreen.LoginActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.addCategoryScreen.AddCategoryActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.addItemScreen.AddItemActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.detailScreen.CategoryDetailActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.splashScreen.SplashScreen"
             android:exported="true"
