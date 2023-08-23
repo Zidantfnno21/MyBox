@@ -55,6 +55,16 @@ class BoxRepository(
         }
     }
 
+    fun logOut(): LiveData<Result<Unit>> = liveData {
+        emit(Result.Loading)
+        try {
+            auth.signOut()
+            emit(Result.Success(Unit))
+        }catch (e: Exception){
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     private fun handleAuthException(exception: Exception): String {
         return when (exception) {
             is FirebaseAuthInvalidUserException -> "Invalid user"
