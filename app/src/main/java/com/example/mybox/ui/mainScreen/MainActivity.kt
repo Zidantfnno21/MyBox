@@ -1,6 +1,5 @@
 package com.example.mybox.ui.mainScreen
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mybox.R
 import com.example.mybox.data.Result
-import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.databinding.ActivityMainBinding
 import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
@@ -30,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(application)
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -43,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             },
             onButtonClick = { clickedCategories->
-                val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+                val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
                 val bottomSheetDialog = BottomSheetDialog(this)
                 bottomSheetDialog.setContentView(bottomSheetView)
 
@@ -51,7 +48,9 @@ class MainActivity : AppCompatActivity() {
                 val deleteButton = bottomSheetView.findViewById<Button>(R.id.btDelete)
 
                 editButton.setOnClickListener {
-
+                    val intent = Intent(this@MainActivity, AddCategoryActivity::class.java)
+                    intent.putExtra(BOX_ID, clickedCategories.Id)
+                    startActivity(intent)
                 }
 
                 deleteButton.setOnClickListener {
@@ -105,9 +104,7 @@ class MainActivity : AppCompatActivity() {
             findViewById(R.id.relativeLayoutMain) ,
             getString(message) ,
             Snackbar.LENGTH_SHORT
-        ).setAction("Undo"){
-//            viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as CategoryModel)
-        }.show()
+        ).show()
     }
 
     private fun showLoading(loading: Boolean) {
