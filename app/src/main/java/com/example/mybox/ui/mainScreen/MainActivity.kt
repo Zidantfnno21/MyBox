@@ -1,7 +1,9 @@
 package com.example.mybox.ui.mainScreen
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,7 @@ import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
 import com.example.mybox.ui.detailScreen.CategoryDetailActivity
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.Event
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
@@ -27,16 +30,39 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(application)
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mainAdapter = MainScreenAdapter { box->
-            val intent = Intent(this@MainActivity, CategoryDetailActivity::class.java)
-            intent.putExtra(BOX_ID, box.Id)
-            startActivity(intent)
-        }
+        mainAdapter = MainScreenAdapter(
+            onClick = {
+                val intent = Intent(this@MainActivity, CategoryDetailActivity::class.java)
+                intent.putExtra(BOX_ID, it.Id)
+                startActivity(intent)
+            },
+            onButtonClick = { clickedCategories->
+                val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_dialog,null)
+                val bottomSheetDialog = BottomSheetDialog(this)
+                bottomSheetDialog.setContentView(bottomSheetView)
+
+                val editButton = bottomSheetView.findViewById<Button>(R.id.btEdit)
+                val deleteButton = bottomSheetView.findViewById<Button>(R.id.btDelete)
+
+                editButton.setOnClickListener {
+
+                }
+
+                deleteButton.setOnClickListener {
+                    viewModel.deleteBox(clickedCategories)
+                    bottomSheetDialog.dismiss()
+                }
+
+                bottomSheetDialog.show()
+            }
+        )
+
         binding.rvMainPage.apply {
             setHasFixedSize(false)
             smoothScrollToPosition(0)

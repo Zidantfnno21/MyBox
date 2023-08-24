@@ -28,6 +28,10 @@ class ViewModelFactory private constructor(private val boxRepository : BoxReposi
             return LoginViewModel(boxRepository) as T
         }else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)){
             return RegisterViewModel(boxRepository) as T
+        }else if (modelClass.isAssignableFrom(LoginViewModel::class.java)){
+            return LoginViewModel(boxRepository) as T
+        }else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)){
+            return RegisterViewModel(boxRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

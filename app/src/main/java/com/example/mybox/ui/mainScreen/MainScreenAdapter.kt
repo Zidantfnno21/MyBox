@@ -3,6 +3,7 @@ package com.example.mybox.ui.mainScreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,8 @@ import com.example.mybox.R
 import com.example.mybox.data.model.CategoryModel
 
 class MainScreenAdapter(
-    private val onClick: (CategoryModel) -> Unit
+    private val onClick: (CategoryModel) -> Unit,
+    private val onButtonClick: (CategoryModel) -> Unit
 ) : androidx.recyclerview.widget.ListAdapter<CategoryModel, MainScreenAdapter.ListViewHolder>(
     DIFF_CALLBACK) {
 
@@ -20,6 +22,7 @@ class MainScreenAdapter(
         private val imgPhoto: View = itemView.findViewById(R.id.ivRv)
         private val tvName: TextView = itemView.findViewById(R.id.textViewCard)
         private val tvDescription: TextView = itemView.findViewById(R.id.textViewCategoryCard)
+        private val btOption: ImageButton = itemView.findViewById(R.id.imageButton)
 
         lateinit var getBox: CategoryModel
         fun bind(box : CategoryModel) {
@@ -32,6 +35,10 @@ class MainScreenAdapter(
             itemView.setOnClickListener {
                 onClick(box)
             }
+
+            btOption.setOnClickListener {
+                onButtonClick(box)
+            }
         }
     }
 
@@ -43,6 +50,7 @@ class MainScreenAdapter(
         if (box != null) {
             holder.bind(box)
         }
+
     }
 
     companion object {
