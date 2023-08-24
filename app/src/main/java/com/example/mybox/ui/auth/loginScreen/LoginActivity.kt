@@ -72,6 +72,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    fun generateLogin() {
+
+    }
 
     private fun showLoading(loading : Boolean) {
         
