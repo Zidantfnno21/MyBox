@@ -26,6 +26,7 @@ class MainViewModel(private val boxRepository : BoxRepository): ViewModel() {
         }
     }
 
+
     fun deleteBox(box: CategoryModel) {
         boxRepository.deleteBox(box)
         _snackbarText.value = Event(R.string.box_deleted)
