@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -27,12 +28,13 @@ class BoxRepository(
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    fun logIn(email: String, password: String) : LiveData<Result<AuthResult>> = liveData {
+    fun logIn(email: String, password: String) : LiveData<Result<FirebaseUser?>> = liveData {
         emit(Result.Loading)
         try {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
+            val user = authResult.user
             if (authResult.user != null) {
-                emit(Result.Success(AuthResult.Success(auth.currentUser!!)))
+                emit(Result.Success(user))
             } else {
                 emit(Result.Error("Authentication failed"))
             }
@@ -41,12 +43,13 @@ class BoxRepository(
         }
     }
 
-    fun register(email: String, password: String) : LiveData<Result<AuthResult>> = liveData {
+    fun register(email: String, password: String) : LiveData<Result<FirebaseUser?>> = liveData {
         emit(Result.Loading)
         try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+            val user = authResult.user
             if (authResult.user != null) {
-                emit(Result.Success(AuthResult.Success(auth.currentUser!!)))
+                emit(Result.Success(user))
             } else {
                 emit(Result.Error("Registration Failed"))
             }

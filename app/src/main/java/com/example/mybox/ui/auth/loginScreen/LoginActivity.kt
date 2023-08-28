@@ -9,12 +9,14 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.mybox.R
+import androidx.core.view.isVisible
 import com.example.mybox.data.Result
 import com.example.mybox.databinding.ActivityLoginBinding
 import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.auth.registerScreen.RegisterActivity
 import com.example.mybox.ui.mainScreen.MainActivity
+import com.example.mybox.utils.SessionPreferences
+import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
@@ -52,9 +54,8 @@ class LoginActivity : AppCompatActivity() {
                             }
                             is Result.Success -> {
                                 showLoading(false)
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                                val user = result.data
+                                generateLogin(user)
                             }
                             is Result.Error -> {
                                 showLoading(false)
@@ -72,11 +73,23 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun generateLogin() {
+    override fun onStart() {
+        super.onStart()
+        if (SessionPreferences().isTokenAvailable(applicationContext)) {
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 
+    private fun generateLogin(data : FirebaseUser?) {
+        SessionPreferences().saveToken(data?.getIdToken(true)?.result?.token.toString() , applicationContext)
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun showLoading(loading : Boolean) {
-        
+        binding.progressBar.isVisible = loading
     }
 }
