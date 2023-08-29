@@ -74,9 +74,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.getBox().observe(this) {boxList->
             if (boxList != null) {
                 when(boxList) {
-                        is Result.Loading -> {
-                            showLoading(true)
-                        }
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
                     is Result.Success -> {
                         showLoading(false)
                         val list =  boxList.data
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     is Result.Error -> {
                         showLoading(false)
-                        Toast.makeText(this@MainActivity , "Whooopss! Failed to get ur BOX :(" , Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity , getString(R.string.failed_fetch) , Toast.LENGTH_SHORT).show()
                     }
                 }
             }

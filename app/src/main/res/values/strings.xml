@@ -16,4 +16,5 @@
     <string name="dark_mode_auto">Automatic</string>
     <string name="dark_mode_on">Dark mode</string>
     <string name="dark_mode_off">Light mode</string>
+    <string name="failed_fetch">Whooopss! Failed to get ur BOX :(</string>
 </resources>

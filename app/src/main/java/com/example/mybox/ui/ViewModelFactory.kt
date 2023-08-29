@@ -10,6 +10,7 @@ import com.example.mybox.ui.addCategoryScreen.AddCategoryViewModel
 import com.example.mybox.ui.addItemScreen.AddItemViewModel
 import com.example.mybox.ui.auth.loginScreen.LoginViewModel
 import com.example.mybox.ui.auth.registerScreen.RegisterViewModel
+import com.example.mybox.ui.detailItemScreen.DetailItemViewModel
 import com.example.mybox.ui.detailScreen.CategoryDetailViewModel
 import com.example.mybox.ui.mainScreen.MainViewModel
 import com.example.mybox.utils.Injection
@@ -32,6 +33,8 @@ class ViewModelFactory private constructor(private val boxRepository : BoxReposi
             return LoginViewModel(boxRepository) as T
         }else if (modelClass.isAssignableFrom(RegisterViewModel::class.java)){
             return RegisterViewModel(boxRepository) as T
+        }else if (modelClass.isAssignableFrom(DetailItemViewModel::class.java)){
+            return DetailItemViewModel(boxRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
