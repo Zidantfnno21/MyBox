@@ -5,8 +5,7 @@ import com.example.mybox.data.BoxRepository
 
 class DetailItemViewModel(private val boxRepository : BoxRepository) : ViewModel() {
 
-    fun getDetailBox(id: Int, categoryId: Int) {
-
-    }
+    fun getDetailBox(id: Int, categoryId: Int) =
+        boxRepository.getDetailItem(id, categoryId)
 
 }

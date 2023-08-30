@@ -63,7 +63,7 @@ class BoxRepository(
             auth.signOut()
             emit(Result.Success(Unit))
         }catch (e: Exception){
-            emit(Result.Error(e.message.toString()))
+            emit(Result.Error(handleAuthException(e)))
         }
     }
 
@@ -115,24 +115,35 @@ class BoxRepository(
     ) : LiveData<Result<DetailModel>> = liveData {
         emit(Result.Loading)
         try {
-            val itemSnapshot = database.child("Category").child(categoryId.toString()).child(id.toString()).get().await()
+            val itemSnapshot = database
+                .child("Category")
+                .child(categoryId.toString())
+                .child("item")
+                .child(id.toString())
+                .get()
+                .await()
 
             if (itemSnapshot.exists()) {
-                val item = itemSnapshot.getValue(DetailModel::class.java)
+                val detailItem = itemSnapshot.getValue(DetailModel::class.java)
 
-                val imgUrl = item?.ImageURL
-                val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(imgUrl.toString())
-
+                detailItem?.let {
+                    emit(Result.Success(detailItem))
+                } ?: kotlin.run {
+                    emit(Result.Error("Something not right :("))
+                }
+            } else {
+                emit(Result.Error("Something not right :("))
             }
 
         }catch (e: Exception){
+            Log.e("BoxRepository", "getDetailItem: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
     }
 
    suspend fun addNewCategories(category: CategoryModel, fileImage: Uri) {
         try {
-            val categoryRef = database.push()
+            val categoryRef = database.child("Category").push()
             categoryRef.setValue(category).await()
 
             val fileRef : StorageReference = FirebaseStorage.getInstance().getReference("image_category/${categoryRef.key}.jpg")
@@ -156,7 +167,7 @@ class BoxRepository(
             val itemRef = detailRef.child("item").push()
             itemRef.setValue(newDetailItem).await()
 
-            val fileRef: StorageReference = FirebaseStorage.getInstance().getReference("image_category/${itemRef.key}.jpg")
+            val fileRef: StorageReference = FirebaseStorage.getInstance().getReference("image_items/${itemRef.key}.jpg")
             fileRef.putFile(fileImage).await()
 
             val imageUrl = fileRef.downloadUrl.await().toString()
