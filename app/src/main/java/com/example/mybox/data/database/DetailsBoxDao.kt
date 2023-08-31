@@ -13,13 +13,13 @@ import com.example.mybox.data.model.DetailModel
 interface DetailsBoxDao {
 
     @Query("SELECT * FROM boxDetails WHERE categoryId = :categoryId ")
-    fun getAllDetailsBox(categoryId: Int): LiveData<DetailModel>
+    suspend fun getDetailsForCategory(categoryId: Int): List<DetailModel>
 
     @Query("SELECT * FROM boxDetails where id = :boxId")
-    fun getBoxById(boxId: Int) : LiveData<DetailModel>
+    fun getDetailsById(boxId: Int) : LiveData<DetailModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBox(newBox : MutableList<DetailModel>) : Long
+    suspend fun insertDetails(detail : DetailModel)
 
     @Delete
     fun deleteBox(box: DetailModel)

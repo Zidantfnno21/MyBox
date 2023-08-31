@@ -7,19 +7,20 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RawQuery
+import androidx.room.Transaction
 import androidx.room.Update
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.mybox.data.model.CategoryModel
+import com.example.mybox.data.model.CategoryWithDetails
 
 @Dao
 interface BoxDao {
 
-    @Query("SELECT * FROM box")
-    fun getAllBox(): LiveData<CategoryModel>
+    @Transaction
+    @Query("SELECT * FROM boxCategory")
+    suspend fun getCategoriesWithDetails(): List<CategoryWithDetails>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBox(box: List<CategoryModel>)
+    suspend fun insertCategory(category: LiveData<CategoryModel>)
 
     @Delete
     fun delete(box : CategoryModel)

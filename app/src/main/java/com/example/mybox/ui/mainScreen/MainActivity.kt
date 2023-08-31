@@ -2,10 +2,14 @@ package com.example.mybox.ui.mainScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mybox.R
 import com.example.mybox.data.Result
 import com.example.mybox.databinding.ActivityMainBinding
+import com.example.mybox.settings.SettingsActivity
 import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
 import com.example.mybox.ui.detailScreen.CategoryDetailActivity
@@ -32,6 +37,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.hide()
+
+        binding.closeIv.setOnClickListener {
+            binding.disposableCardView.isVisible = false
+
+            val params = binding.rvMainPage.layoutParams as ConstraintLayout.LayoutParams
+            params.topToBottom = binding.textView2.id
+
+            binding.rvMainPage.layoutParams = params
+
+        }
 
         mainAdapter = MainScreenAdapter(
             onClick = {
@@ -80,7 +97,12 @@ class MainActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
                         val list =  boxList.data
-                        mainAdapter.submitList(list)
+                        if (list.isEmpty()) {
+                            showEmptyState(true)
+                        } else {
+                            showEmptyState(false)
+                            mainAdapter.submitList(list)
+                        }
                     }
                     is Result.Error -> {
                         showLoading(false)
@@ -97,7 +119,30 @@ class MainActivity : AppCompatActivity() {
         binding.fAB1.setOnClickListener {
             startActivity(Intent(this@MainActivity, AddCategoryActivity::class.java))
         }
+
     }
+
+    override fun onCreateOptionsMenu(menu : Menu?) : Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return  true
+    }
+
+    override fun onOptionsItemSelected(item : MenuItem) : Boolean {
+        return when (item.itemId) {
+            R.id.settings -> {
+                settings()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun settings() {
+        val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun showSnackBar(eventMessage: Event<Int>) {
         val message = eventMessage.getContentIfNotHandled() ?: return
         Snackbar.make(
@@ -109,6 +154,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoading(loading: Boolean) {
         binding.progressBar.isVisible = loading
+    }
+
+    private fun showEmptyState(empty: Boolean) {
+        binding.cardEmptyState.isVisible = empty
     }
 
     private fun initAction() {

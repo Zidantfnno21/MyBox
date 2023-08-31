@@ -11,7 +11,7 @@ data class DetailModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val categoryId : Int,
-    val Name : String,
+    val name : String,
     val timeStamp : Long ,
-    val ImageURL : String
+    val imageURL : String
 ) : Parcelable

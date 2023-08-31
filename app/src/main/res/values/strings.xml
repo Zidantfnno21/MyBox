@@ -18,4 +18,5 @@
     <string name="dark_mode_off">Light mode</string>
     <string name="failed_fetch">Whooopss! Failed to get ur BOX :(</string>
     <string name="item_picture">Item Picture</string>
+    <string name="settings">Settings</string>
 </resources>

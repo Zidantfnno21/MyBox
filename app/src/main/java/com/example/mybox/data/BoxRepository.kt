@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.mybox.data.database.BoxDatabase
 import com.example.mybox.data.model.CategoryModel
+import com.example.mybox.data.model.CategoryWithDetails
 import com.example.mybox.data.model.DetailModel
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
@@ -26,6 +29,12 @@ class BoxRepository(
     ) {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private fun enablePersistence() {
+        Firebase.database.setPersistenceEnabled(true)
+    }
+
+
 
     fun logIn(email: String, password: String) : LiveData<Result<FirebaseUser?>> = liveData {
         emit(Result.Loading)
@@ -77,7 +86,7 @@ class BoxRepository(
         }
     }
 
-    fun getAllBox(): LiveData<Result<List<CategoryModel>>> = liveData {
+    suspend fun getAllBox(): LiveData<Result<List<CategoryWithDetails>>> = liveData {
         emit(Result.Loading)
         try {
             val snapshot = database.child("Category").get().await()
