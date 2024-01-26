@@ -110,6 +110,15 @@ class AddItemActivity : AppCompatActivity() {
             push()
         }
 
+
+        binding.addItemTilTitle.editText?.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                binding.scrollView.post {
+                    binding.scrollView.fullScroll(v.bottom)
+                }
+            }
+        }
+
     }
 
     private fun openImageAction() {
