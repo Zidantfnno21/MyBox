@@ -1,172 +1,404 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F9F9">
+    android:fitsSystemWindows="true"
+    tools:context=".ui.mainScreen.MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.core.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/relativeLayoutMain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/poppins"
-        android:text="Haelloo 👋"
-        android:textColor="#4AC9E3"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Sup BOX'ers"
-        android:textColor="#4AC9E3"
-        android:textSize="34sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMainPage"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/disposableCardView">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/disposableCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:visibility="visible"
-        app:cardBackgroundColor="#2C2C2C"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="60dp">
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Build Your Inventory BOX!🗃️"
-                android:textColor="#ffff"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
-                app:layout_constraintStart_toStartOf="@+id/textView6"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView6"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/disposableCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/poppins"
-                android:text="make you easier to organizing and remembering your list 🤩🤩🤩"
-                android:textColor="#ffff"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:padding="4dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="visible"
+                app:cardBackgroundColor="#2C2C2C"
+                app:cardCornerRadius="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/closeIv"
-                android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="399dp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/disposable_card_head"
+                        android:textColor="#ffff"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toTopOf="@+id/textView6"
+                        app:layout_constraintEnd_toStartOf="@+id/closeIv"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/textView6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/disposable_card_body"
+                        android:textColor="#ffff"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/closeIv"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/close"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:minWidth="30dp"
+                        android:minHeight="30dp"
+                        app:cornerRadius="50dp"
+                        app:elevation="@null"
+                        app:icon="@drawable/ic_close"
+                        app:iconGravity="textStart"
+                        app:iconPadding="1dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardEmptyState"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:clickable="true"
-                android:contentDescription="Close"
-                android:minWidth="30dp"
-                android:minHeight="30dp"
-                android:src="@drawable/ic_close"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
-                app:layout_constraintEnd_toEndOf="@+id/textView6"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toTopOf="@+id/textView7"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:visibility="invisible"
+                app:cardBackgroundColor="#F2F2F2"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/disposableCardView">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/empty_state_header"
+                        android:textColor="#4AC9E3"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="14dp"
+                        android:fontFamily="@font/poppins"
+                        android:text="@string/empty_state_body"
+                        android:textColor="#4AC9E3"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMainPage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/disposableCardView" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardEmptyState"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
-        android:visibility="invisible"
-        app:cardBackgroundColor="#F2F2F2"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="17dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/disposableCardView">
+        android:fitsSystemWindows="true" >
 
-
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@android:color/transparent"
+            app:collapsedTitleGravity="center"
+            app:expandedTitleGravity="center"
+            app:toolbarId="@+id/toolbar">
 
-            <TextView
-                android:id="@+id/emptyStateTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Whoops! Looks like this place is as empty as a desert. 🏝️🌵 "
-                android:textColor="#4AC9E3"
-                android:textSize="20sp" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:visibility="visible"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin">
 
-            <TextView
-                android:id="@+id/emptyStateDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="14dp"
-                android:fontFamily="@font/poppins"
-                android:text="Let’s Add some life to it! 🎉🎉 "
-                android:textColor="#4AC9E3"
-                android:textSize="14sp" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toolbarContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="visible">
 
-        </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/backButtonSearch"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:contentDescription="@string/backButton"
+                        android:focusable="true"
+                        android:foreground="@drawable/button_selector"
+                        android:padding="4dp"
+                        android:visibility="gone"
+                        app:backgroundTint="#22606060"
+                        app:elevation="@null"
+                        app:icon="@drawable/ic_baseline_arrow_back_24"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="2dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchViews"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        android:visibility="gone"
+                        app:iconifiedByDefault="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/backButtonSearch"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/backButtonSearch"
+                        app:layout_constraintTop_toTopOf="@+id/backButtonSearch"
+                        app:queryBackground="@color/transparent"
+                        app:queryHint="@string/search_box_s"
+                        app:searchIcon="@null" />
 
-    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.search.SearchBar
+                        android:id="@+id/toolbarBtnSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:elevation="0dp"
+                        android:text="@string/search_box_s"
+                        android:transitionName="changeActivity"
+                        android:visibility="visible"
+                        app:backgroundTint="?attr/colorSecondary"
+                        app:buttonGravity="center_vertical"
+                        app:elevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/toolbarBtnChangeGrid"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/change_grid"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:stateListAnimator="@null"
+                        android:visibility="visible"
+                        app:elevation="@null"
+                        app:icon="@drawable/ic_card_view_24"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="2dp"
+                        app:iconSize="24dp"
+                        app:iconTint="?attr/colorOnSurface"
+                        app:layout_constraintBottom_toBottomOf="@+id/toolbarBtnSettings"
+                        app:layout_constraintEnd_toStartOf="@+id/toolbarBtnSettings"
+                        app:layout_constraintTop_toTopOf="@+id/toolbarBtnSettings" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/toolbarBtnSettings"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/settings"
+                        android:focusable="true"
+                        android:padding="4dp"
+                        android:stateListAnimator="@null"
+                        android:visibility="visible"
+                        app:elevation="@null"
+                        app:icon="@drawable/ic_settings"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="2dp"
+                        app:iconSize="24dp"
+                        app:iconTint="?attr/colorOnSurface"
+                        app:layout_constraintBottom_toBottomOf="@+id/toolbarBtnSearch"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/toolbarBtnSearch" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <RelativeLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvGreetings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginEnd="20dp"
+                    android:elegantTextHeight="true"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="?attr/colorOnSurface"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:text="@string/greetings"
+                    android:textSize="24sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvGreetings"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:text="@string/header"
+                    android:textSize="42sp" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:visibility="gone">
+
+                <com.google.android.material.search.SearchBar
+                    android:id="@+id/searchButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:elevation="@dimen/cardview_compat_inset_shadow"
+                    android:text="@string/search_box_s"
+                    android:textAlignment="viewStart"
+                    android:transitionName="changeActivity"
+                    app:backgroundTint="?attr/colorPrimaryVariant"
+                    app:buttonGravity="center_vertical"
+                    app:elevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/gridButton"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toStartOf="@id/settingsButton"
+                    android:clickable="true"
+                    android:contentDescription="@string/log_out"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:stateListAnimator="@null"
+                    app:elevation="@null"
+                    app:icon="@drawable/ic_card_view_24"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="0dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="@+id/settingsButton"
+                    app:layout_constraintEnd_toStartOf="@+id/settingsButton"
+                    app:layout_constraintTop_toTopOf="@+id/settingsButton" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsButton"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignEnd="@id/searchButton"
+                    android:clickable="true"
+                    android:contentDescription="@string/settings"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:stateListAnimator="@null"
+                    app:elevation="@null"
+                    app:icon="@drawable/ic_settings"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="0dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchButton"
+                    app:layout_constraintEnd_toEndOf="@+id/searchButton"
+                    app:layout_constraintTop_toTopOf="@+id/searchButton" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fAB1"
+        android:id="@+id/fabMain"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -175,32 +407,29 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        android:contentDescription="@string/Hello"
-        app:backgroundTint="#000000"
+        android:focusable="true"
+        android:contentDescription="@string/add_category_picture"
         app:layout_anchorGravity="bottom|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_add" />
-
+        app:srcCompat="@drawable/ic_add"
+        app:tint="?attr/colorSecondaryVariant"/>
 
     <FrameLayout
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="18dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:visibility="visible">
 
         <ProgressBar
-            android:id="@+id/progressBar"
             style="@android:style/Widget.Material.ProgressBar.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminate="true" />
+
     </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

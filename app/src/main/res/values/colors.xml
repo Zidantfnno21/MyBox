@@ -6,7 +6,9 @@
     <color name="secondaryColor">#0b414f</color>
     <color name="secondaryLightColor">#3e6c7b</color>
     <color name="secondaryDarkColor">#001b27</color>
-    <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#ffffff</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="onSurfaceVariant">#1C1C1C</color>
+    <color name="onSurfaceVariantDark">#ACACAC</color>
+
 </resources>

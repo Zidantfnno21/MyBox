@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.mybox.data.Converters
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
 
 @Database(
     entities = [CategoryModel::class, DetailModel::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class BoxDatabase: RoomDatabase() {
     abstract fun boxDao(): BoxDao
     abstract fun detailDao(): DetailsBoxDao

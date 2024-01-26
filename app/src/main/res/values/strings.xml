@@ -1,13 +1,11 @@
 <resources>
     <string name="app_name">MyBox</string>
     <string name="Hello">Greetings</string>
-    <string name="Opsi">Opsi</string>
-    <string name="ChangeProfile">Edit Item Picture</string>
+    <string name="Opsi">Options</string>
+    <string name="ChangeProfile">Add Item Picture</string>
     <string name="ChangeBanner">Edit Category Picture</string>
-    <string name="backButton">Kembali</string>
+    <string name="backButton">Back</string>
     <string name="box_deleted">Box Deleted</string>
-
-    <!-- Night Mode Preferences -->
     <string name="pref_dark_title">Dark mode</string>
     <string name="pref_key_dark" translatable="false">key_dark_mode</string>
     <string name="pref_dark_follow_system" translatable="false">follow_system</string>
@@ -17,6 +15,65 @@
     <string name="dark_mode_on">Dark mode</string>
     <string name="dark_mode_off">Light mode</string>
     <string name="failed_fetch">Whooopss! Failed to get ur BOX :(</string>
-    <string name="item_picture">Item Picture</string>
     <string name="settings">Settings</string>
+    <string name="log_out">Log Out</string>
+    <string name="pref_log_out">User Log Out</string>
+    <string name="snap">Snap</string>
+    <string name="flash_option">Flash Option</string>
+    <string name="close">Close</string>
+    <string name="empty_state_text">Seems Like the box\'s are empty</string>
+    <string name="appbar_text_create_new">Create New</string>
+    <string name="greetings">Hello, %1$s!!</string>
+    <string name="empty_state_body">Add some life to it! 🎉🎉</string>
+    <string name="empty_state_header">Whoops! Looks like this place is as empty as a desert. 🏝️🌵</string>
+    <string name="disposable_card_head">Start Make Your Box!</string>
+    <string name="disposable_card_body">easier to organizing and remembering your list</string>
+    <string name="header">Your Box\'s \nList</string>
+    <string name="delete_dialog_title">Are you sure want to delete %1$s Category Box\'s?</string>
+    <string name="permission_icon">Permission Icon</string>
+    <string name="permission_title">Permission Required</string>
+    <string name="permission_message">To use this app, please grant the required permissions.</string>
+    <string name="button_retry">Retry</string>
+    <string name="button_skip">Skip</string>
+    <string name="search_box_s">Search Box\'s</string>
+    <string name="flip_camera">Flip Camera</string>
+    <string name="hero_image_category">Hero Image Category</string>
+    <string name="item_image">Item Image</string>
+    <string name="add_category_picture">Add Category Picture</string>
+    <string name="add_category_title_hint">Title</string>
+    <string name="add_category_description_hint">Description (Optional)</string>
+    <string name="uploading">Uploading…</string>
+    <string name="permission_open_settings_title">Permission must be granted!</string>
+    <string name="permission_open_settings_message"><![CDATA[Open Settings > Permissions then turn on the permission]]></string>
+    <string name="your_box_s">Your Box\'s</string>
+    <string name="more_options">More Options</string>
+    <string name="title">Title</string>
+    <string name="save">Save</string>
+    <string name="login_title">We\'ve Missing You!</string>
+    <string name="login_msg">Please Login!</string>
+    <string name="login_email_hint">E-mail</string>
+    <string name="login_pass_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="register_quest">Just got here?</string>
+    <string name="regis">Register</string>
+    <string name="change_grid">Change Grid</string>
+    <string name="register_title">New Here?</string>
+    <string name="register_msg">You can Register First!</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_email_hint">E-mail</string>
+    <string name="register">Register</string>
+    <string name="register_password_hint">Password</string>
+    <string name="login_quest">Already have Account?</string>
+    <string name="login_textButton">Log in</string>
+    <string name="box_s_title">Box\'s Title</string>
+    <string name="edit_box_s">Edit Box\'s</string>
+    <string name="delete_box_s">Delete Box\'s</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_msg">You will be returned to Log In Screen</string>
+    <string name="dialog_title">Logging Out</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="textview">TextView</string>
+    <string name="update">Update</string>
+    <string name="category_picture">Category Picture</string>
 </resources>

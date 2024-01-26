@@ -12,14 +12,14 @@ import com.example.mybox.data.model.DetailModel
 @Dao
 interface DetailsBoxDao {
 
-    @Query("SELECT * FROM boxDetails WHERE categoryId = :categoryId ")
-    suspend fun getDetailsForCategory(categoryId: Int): List<DetailModel>
+    @Query("SELECT * FROM Details WHERE categoryId = :categoryId")
+    fun getDetailsByCategoryId(categoryId: Int): LiveData<List<DetailModel>>
 
-    @Query("SELECT * FROM boxDetails where id = :boxId")
+    @Query("SELECT * FROM Details where id = :boxId")
     fun getDetailsById(boxId: Int) : LiveData<DetailModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDetails(detail : DetailModel)
+    suspend fun insertDetails(detail : List<DetailModel>)
 
     @Delete
     fun deleteBox(box: DetailModel)

@@ -2,12 +2,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iconSpaceReserved="false"
+        android:title="Display Options">
+
+    </PreferenceCategory>
     <ListPreference
         android:defaultValue="@string/pref_dark_follow_system"
         android:entries="@array/dark_mode"
         android:entryValues="@array/dark_mode_value"
         android:key="@string/pref_key_dark"
         android:title="@string/pref_dark_title"
+        app:iconSpaceReserved="false"
         app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iconSpaceReserved="false"
+        android:title="Account">
+
+    </PreferenceCategory>
+    <Preference
+        android:key="@string/pref_log_out"
+        android:title="@string/log_out"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true"
+        app:layout="@layout/log_out"/>
 
 </PreferenceScreen>

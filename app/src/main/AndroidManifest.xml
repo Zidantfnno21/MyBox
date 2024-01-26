@@ -1,52 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="true" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyBox">
+        android:theme="@style/Theme.MyBox"
+        tools:targetApi="s" >
+        <activity
+            android:name=".ui.addCategoryScreen.CameraActivity"
+            android:exported="false" />
         <activity
             android:name=".settings.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ui.mainScreen.MainActivity" />
         <activity
             android:name=".ui.auth.registerScreen.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ui.auth.loginScreen.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.addCategoryScreen.AddCategoryActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.addItemScreen.AddItemActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.detailScreen.CategoryDetailActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.detailItemScreen.DetailItemActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.splashScreen.SplashScreen"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:launchMode="singleInstancePerTask"
+            android:theme="@style/Theme.App.Starting" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,8 +51,25 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.addCategoryScreen.AddCategoryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.addItemScreen.AddItemActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.detailScreen.CategoryDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.mainScreen.MainActivity"/>
+        <activity
+            android:name=".ui.detailItemScreen.DetailItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.mainScreen.MainActivity"
-            android:exported="true" />
+            android:exported="false"
+            android:label=""
+            android:theme="@style/Theme.MyBox.NoActionBar" />
 
         <meta-data
             android:name="preloaded_fonts"

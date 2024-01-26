@@ -4,36 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:contentDescription="@string/backButton"
-        android:background="#ffff"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
-
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:fitsSystemWindows="true"
+            android:layout_gravity="top"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="70dp"
+            android:paddingBottom="60dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profilePicture3"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
                 android:adjustViewBounds="true"
-                android:background="@color/primaryColor"
+                android:background="?attr/colorPrimary"
                 android:contentDescription="@string/ChangeBanner"
-                android:scaleType="fitXY"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge" />
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.ExtraLarge"
+                app:srcCompat="@drawable/app_icon"
+                app:strokeColor="@color/primaryColor" />
 
             <TextView
                 android:id="@+id/btChangePic"
@@ -42,31 +48,38 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="10dp"
                 android:clickable="true"
+                android:elegantTextHeight="true"
+                android:focusable="true"
                 android:fontFamily="@font/poppins_semibold"
                 android:gravity="center_vertical"
                 android:minHeight="48dp"
-                android:text="Add Category Picture"
-                android:textColor="#000000"
+                android:text="@string/add_category_picture"
                 android:textSize="14sp" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/addTilTitle"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeWidthFocused="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/add_category_title_hint"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="Title">
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/add_etTitle"
+                    android:id="@+id/addEtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1" />
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins"
+                    android:imeOptions="actionDone"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,83 +87,125 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeWidthFocused="2dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/add_category_description_hint"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="8dp"
-                android:hint="Description">
+                app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/add_etDesc"
+                    android:id="@+id/addEtDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1" />
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins"
+                    android:inputType="textMultiLine"
+                    android:maxLength="255"
+                    android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_btSave"
+                android:id="@+id/addBtSave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_semibold"
+                android:letterSpacing="0"
                 android:paddingTop="11dp"
                 android:paddingBottom="11dp"
+                android:text="@string/appbar_text_create_new"
                 android:textAlignment="center"
-                app:cornerRadius="20dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="16sp"
-                android:letterSpacing="0"
-                android:elegantTextHeight="true"
-                android:textFontWeight="600"
-                android:textColor="#FF000000"
-                android:backgroundTint="#4AC9E3"
                 android:textAllCaps="false"
-                android:text="Save" />
+                android:textSize="16sp"
+                app:cornerRadius="20dp" />
 
         </LinearLayout>
-    </ScrollView>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarAddCategory"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+
+        android:background="?attr/colorPrimary"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/imageButton2"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/backButton"
+                app:backgroundTint="?attr/colorPrimary"
+                app:cornerRadius="150dp"
+                app:icon="@drawable/ic_baseline_arrow_back_24"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="20dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/addCategoryAppbarText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingVertical="0dp"
+                android:text="@string/appbar_text_create_new"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/SHOW_PROGRESS"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-
+        android:id="@+id/progressBar3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@drawable/form_shape"
-        android:backgroundTint="#2C2C2C"
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="15dp"
         android:paddingStart="30dp"
         android:paddingEnd="30dp"
-        android:screenReaderFocusable="true"
         android:visibility="invisible">
 
         <ProgressBar
-            android:id="@+id/progressBar3"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/cardview_compat_inset_shadow" />
 
         <TextView
-            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:elevation="@dimen/cardview_compat_inset_shadow"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
-            android:text="Loading"
-            android:textColor="@color/primaryLightColor"
+            android:text="@string/uploading"
             android:textSize="20sp" />
     </LinearLayout>
+
 
 </RelativeLayout>

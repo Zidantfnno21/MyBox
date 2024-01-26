@@ -3,11 +3,12 @@ package com.example.mybox.data
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.mybox.data.database.BoxDatabase
 import com.example.mybox.data.model.CategoryModel
-import com.example.mybox.data.model.CategoryWithDetails
 import com.example.mybox.data.model.DetailModel
+import com.example.mybox.data.model.UserModel
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -15,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -26,53 +26,85 @@ import java.util.concurrent.ExecutorService
 class BoxRepository(
     private val boxDatabase : BoxDatabase,
     private val executor: ExecutorService
-    ) {
-    private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+) {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val storage = FirebaseStorage.getInstance().reference
+    private val usersReference: DatabaseReference = Firebase.database.getReference("Users")
+    private fun uidRef(uid: String) = usersReference.child(uid)
+    private val _uploadProgress = MutableLiveData<Int>()
+    val uploadProgress: LiveData<Int>
+        get() = _uploadProgress
 
-    private fun enablePersistence() {
-        Firebase.database.setPersistenceEnabled(true)
-    }
-
-
-
-    fun logIn(email: String, password: String) : LiveData<Result<FirebaseUser?>> = liveData {
+    //register
+    
+    fun logIn(
+        email : String ,
+        password : String
+    ) : LiveData<Result<FirebaseUser?>> = liveData {
         emit(Result.Loading)
         try {
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             val user = authResult.user
-            if (authResult.user != null) {
+
+            if (user != null) {
                 emit(Result.Success(user))
-            } else {
-                emit(Result.Error("Authentication failed"))
             }
         }catch (e: Exception){
             emit(Result.Error(handleAuthException(e)))
+            Log.e("BoxRepository" , "logIn: ${e.message.toString()}", e)
         }
     }
 
-    fun register(email: String, password: String) : LiveData<Result<FirebaseUser?>> = liveData {
+    fun register(
+        users : String ,
+        email : String ,
+        password : String
+    ) : LiveData<Result<FirebaseUser?>> = liveData {
         emit(Result.Loading)
         try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val user = authResult.user
-            if (authResult.user != null) {
+
+            user?.let { currentUser->
                 emit(Result.Success(user))
-            } else {
+
+                val uid = currentUser.uid
+                val userRef = usersReference.child(uid)
+                val userData = UserModel(
+                    email = email,
+                    name = users,
+                )
+
+                userRef.child("personal_data").setValue(userData).await()
+            } ?: run {
                 emit(Result.Error("Registration Failed"))
             }
         }catch (e: Exception){
             emit(Result.Error(handleAuthException(e)))
+            Log.e("BoxRepository", handleAuthException(e))
         }
     }
 
-    fun logOut(): LiveData<Result<Unit>> = liveData {
+    fun logOut() {
+        auth.signOut()
+    }
+
+    fun getUserDataByUID(uid: String): LiveData<Result<UserModel>> = liveData {
         emit(Result.Loading)
         try {
-            auth.signOut()
-            emit(Result.Success(Unit))
-        }catch (e: Exception){
-            emit(Result.Error(handleAuthException(e)))
+            val userDataRef = usersReference.child(uid)
+            val snapshot = userDataRef.child("personal_data").get().await()
+
+            val dataByUID = snapshot.getValue(UserModel::class.java)
+
+            if (dataByUID != null) {
+                emit(Result.Success(dataByUID))
+            }else{
+                emit(Result.Error("User data not found for UID: $uid"))
+            }
+        } catch (e: Exception) {
+            emit(Result.Error("Failed to fetch user data: ${e.message}"))
+            Log.e("UserDataRepository", "getUserDataByUID: ${e.message}", e)
         }
     }
 
@@ -86,48 +118,87 @@ class BoxRepository(
         }
     }
 
-    suspend fun getAllBox(): LiveData<Result<List<CategoryWithDetails>>> = liveData {
+    //read
+    fun getAllBox(uid: String): LiveData<Result<List<CategoryModel>>> = liveData {
         emit(Result.Loading)
         try {
-            val snapshot = database.child("Category").get().await()
-            val boxs = snapshot.children.mapNotNull {
-                it.getValue(CategoryModel::class.java)
+            val uidRef = usersReference.child(uid)
+
+            val snapshot = uidRef.child("Category").get().await()
+
+            val boxes = snapshot.children.mapNotNull { categorySnapshot->
+                categorySnapshot.getValue(CategoryModel::class.java)
             }
-            emit(Result.Success(boxs))
-            boxDatabase.boxDao().insertBox(boxs)
+            boxDatabase.boxDao().insertCategory(boxes)
+            emit(Result.Success(boxes))
         }catch (e: Exception) {
             Log.e("BoxRepository", "getAllBox: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
     }
 
-    fun getAllDetailBox(categoryId : Int): LiveData<Result<List<DetailModel>>> = liveData {
+    fun getBoxById(
+        uid : String ,
+        id : Int
+    ): LiveData<Result<CategoryModel>> = liveData {
+        emit(Result.Loading)
+        try {
+            val snapshot = uidRef(uid)
+                .child("Category")
+                .child(id.toString())
+                .get()
+                .await()
+
+            val boxById = snapshot.getValue(CategoryModel::class.java)
+
+            if (boxById != null) {
+                boxDatabase.boxDao().getCategoriesById(id)
+                emit(Result.Success(boxById))
+            } else {
+                emit(Result.Error("Failed to parse data"))
+            }
+        }catch (e: Exception) {
+            emit(Result.Error(e.message ?: "An error occurred"))
+            Log.e("BoxRepository", "getBoxById: ${e.message.toString()}")
+        }
+    }
+
+    fun getAllDetailBox(
+        uid: String,
+        categoryId : Int
+    ): LiveData<Result<List<DetailModel>>> = liveData {
         emit(Result.Loading)
         try{
-            val categorySnapshot = database.child("Category").child(categoryId.toString()).get().await()
+            val categorySnapshot = uidRef(uid)
+                .child("Category")
+                .child(categoryId.toString())
+                .child("items")
+                .get()
+                .await()
 
             val detailItems = categorySnapshot.children.mapNotNull {
                 it.getValue(DetailModel::class.java)
             }
 
+            boxDatabase.detailDao().insertDetails(detailItems)
             emit(Result.Success(detailItems))
-            boxDatabase.detailDao().insertBox(detailItems as MutableList<DetailModel>)
         }catch (e: Exception) {
             Log.e("BoxRepository", "getAllDetailBox: ${e.message.toString()}")
-            emit(Result.Error(e.message.toString()))
+            emit(Result.Error(e.message ?: "An error occurred"))
         }
     }
 
-    fun getDetailItem(
+    fun getDetailBoxById(
+        uid: String,
         id: Int,
         categoryId : Int
     ) : LiveData<Result<DetailModel>> = liveData {
         emit(Result.Loading)
         try {
-            val itemSnapshot = database
+            val itemSnapshot = uidRef(uid)
                 .child("Category")
                 .child(categoryId.toString())
-                .child("item")
+                .child("items")
                 .child(id.toString())
                 .get()
                 .await()
@@ -150,56 +221,201 @@ class BoxRepository(
         }
     }
 
-   suspend fun addNewCategories(category: CategoryModel, fileImage: Uri) {
+    //create-update
+    suspend fun addNewCategories(
+        uid : String ,
+        category : CategoryModel ,
+        fileImage : Uri
+    ): CategoryModel {
         try {
-            val categoryRef = database.child("Category").push()
-            categoryRef.setValue(category).await()
+            val snapshot = uidRef(uid).child("Category").get().await()
 
-            val fileRef : StorageReference = FirebaseStorage.getInstance().getReference("image_category/${categoryRef.key}.jpg")
-            fileRef.putFile(fileImage).await()
+            val nextKey = if (!snapshot.exists() || category.id == 0 ) {
+                val maxKey = snapshot.children.maxOfOrNull { it.key?.toInt() ?: 0 } ?: 0
+                maxKey + 1
+            } else {
+                category.id //if item edit will returned the previous id
+            }
 
-            val imageUrl = fileRef.downloadUrl.await().toString()
-            val updatedCategory = category.copy(ImageURL = imageUrl)
+            val newCategoryRef = uidRef(uid).child(
+                "Category"
+            ).child(nextKey.toString())
 
-            categoryRef.setValue(updatedCategory).await()
-            boxDatabase.boxDao().insertBox(listOf(category))
+            val categoryWithKey = category.copy(
+                id = nextKey
+            )
+
+            newCategoryRef.setValue(
+                categoryWithKey
+            ).await()
+
+            val imageUrl = if (fileImage.scheme == "file") {
+                val fileRef: StorageReference = FirebaseStorage
+                    .getInstance()
+                    .getReference("user_$uid/image_category/category_${nextKey}/image_${nextKey}.jpg")
+
+                fileRef.putFile(fileImage)
+                    .addOnProgressListener { taskSnapshot ->
+                        val progress = ((100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount).toInt()
+                        _uploadProgress.postValue(progress)
+                    }
+                    .await()
+
+                fileRef.downloadUrl.await().toString()
+            } else {
+                fileImage.toString()
+            }
+
+            val updatedCategory = categoryWithKey.copy(imageURL = imageUrl)
+            newCategoryRef.setValue(updatedCategory).await()
+
+            boxDatabase.boxDao().insertCategory(listOf(updatedCategory))
 
             Log.d("BoxRepository", "New category added successfully.")
+
+            return updatedCategory
         } catch (e: Exception) {
             Log.e("BoxRepository", "addNewCategory: ${e.message.toString()}")
+            throw  e
         }
+
     }
 
-    suspend fun addNewDetailItem(categoryId: Int , newDetailItem: DetailModel, fileImage : Uri) {
+    suspend fun addNewDetailItem(
+        uid : String ,
+        categoryId : Int ,
+        newDetailItem : DetailModel ,
+        fileImage : Uri
+    ): DetailModel {
         try {
-            val detailRef = database.child("Category").child(categoryId.toString())
-            val itemRef = detailRef.child("item").push()
-            itemRef.setValue(newDetailItem).await()
+            val categoryRefFromCategoryId = uidRef(uid)
+                .child("Category")
+                .child(categoryId.toString())
 
-            val fileRef: StorageReference = FirebaseStorage.getInstance().getReference("image_items/${itemRef.key}.jpg")
-            fileRef.putFile(fileImage).await()
+            val itemsRef = categoryRefFromCategoryId.child("items")
 
-            val imageUrl = fileRef.downloadUrl.await().toString()
-            val updateDetailItem = newDetailItem.copy(ImageURL = imageUrl)
+            val snapshotFromItem = itemsRef.get().await()
 
+            val nextKey = if (!snapshotFromItem.exists() || newDetailItem.id == 0) {
+                val maxKey = snapshotFromItem.children.maxOfOrNull { it.key?.toInt() ?: 0 } ?: 0
+                maxKey + 1
+            } else {
+                newDetailItem.id //if item edit will returned the previous id
+            }
+
+            val itemRef = itemsRef.child(nextKey.toString())
+
+            val itemWithKey = newDetailItem.copy(
+                id = nextKey
+            )
+
+            itemRef.setValue(itemWithKey).await()
+
+            val imageUrl = if (fileImage.scheme == "file") {
+                val fileRef: StorageReference = FirebaseStorage
+                    .getInstance()
+                    .getReference("user_$uid/image_category/category_${categoryId}/itemImg_$nextKey.jpg")
+
+                fileRef.putFile(fileImage)
+                    .addOnProgressListener { taskSnapshot ->
+                        val progress = ((100.0 * taskSnapshot.bytesTransferred) / taskSnapshot.totalByteCount).toInt()
+                        _uploadProgress.postValue(progress)
+                    }
+                    .await()
+                fileRef.downloadUrl.await().toString()
+            }else{
+                fileImage.toString()
+            }
+
+            val updateDetailItem = itemWithKey.copy(imageURL = imageUrl)
             itemRef.setValue(updateDetailItem).await()
-            boxDatabase.detailDao().insertBox(mutableListOf(newDetailItem))
+
+            boxDatabase.detailDao().insertDetails(mutableListOf(updateDetailItem))
 
             Log.d("BoxRepository", "Detail item added successfully")
+
+            return updateDetailItem
         }catch (e: Exception){
             Log.e("BoxRepository", "Error adding detail item: ${e.message}")
+            throw e
         }
     }
 
-    fun deleteBox(box : CategoryModel) {
+    //delete
+
+    private val deleteBoxLiveData: MutableLiveData<Result<Unit>> = MutableLiveData()
+    fun deleteBox(uid:String, box : CategoryModel, itemId: Int) {
+        deleteBoxLiveData.value = Result.Loading
+
         executor.execute {
-            boxDatabase.boxDao().delete(box)
+            try {
+                boxDatabase.boxDao().delete(box)
+
+                uidRef(uid)
+                    .child("Category")
+                    .child(itemId.toString())
+                    .removeValue()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            deleteBoxLiveData.postValue(Result.Success(Unit))
+                            val storageRef = storage.child("user_$uid/image_category/category_${itemId}/")
+                            deleteFolder(storageRef)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        deleteBoxLiveData.postValue(Result.Error(exception.message ?: "An error occurred"))
+                    }
+
+            } catch (e: Exception) {
+                deleteBoxLiveData.postValue(Result.Error("An error occurred: ${e.message}"))
+            }
         }
     }
 
-    fun deleteDetailBox(detailBox : DetailModel) {
-        executor.execute {
-            boxDatabase.detailDao().deleteBox(detailBox)
+    private fun deleteFolder(folderRef: StorageReference) {
+        folderRef.listAll().addOnSuccessListener { listResult ->
+            listResult.items.forEach { item ->
+                item.delete()
+            }
+            listResult.prefixes.forEach { prefix ->
+                deleteFolder(prefix)
+            }
+        }.addOnFailureListener {exception->
+            deleteBoxLiveData.postValue(Result.Error(exception.message ?: "An error occurred"))
         }
     }
+
+    private val deleteBoxItemLiveData: MutableLiveData<Result<Unit>> = MutableLiveData()
+    fun deleteDetailBox(uid: String, detailBox : DetailModel, categoryId: Int, itemId : Int) {
+        deleteBoxItemLiveData.value = Result.Loading
+
+        executor.execute {
+            try {
+                boxDatabase.detailDao().deleteBox(detailBox)
+
+                uidRef(uid)
+                    .child("Category")
+                    .child(categoryId.toString())
+                    .child("items")
+                    .child(itemId.toString())
+                    .removeValue()
+                    .addOnCompleteListener { task->
+                        if (task.isSuccessful) {
+                            deleteBoxItemLiveData.postValue(Result.Success(Unit))
+                            storage
+                                .child("user_$uid/image_category/category_${categoryId}/itemImg_$itemId.jpg")
+                                .delete()
+                        }else{
+                            deleteBoxItemLiveData.postValue(Result.Error("Failed to delete from Firebase"))
+                        }
+                    }
+                    .addOnFailureListener { exception->
+                        deleteBoxItemLiveData.postValue(Result.Error(exception.message ?: "An error occurred"))
+                    }
+            } catch (e: Exception) {
+                deleteBoxItemLiveData.postValue(Result.Error("An error occurred: ${e.message}"))
+            }
+        }
+    }
+
 }

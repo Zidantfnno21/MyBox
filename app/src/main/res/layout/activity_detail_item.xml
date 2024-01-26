@@ -5,6 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iVperItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:foregroundGravity="center"
+                android:importantForAccessibility="no"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tVTimeStamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:fontFamily="@font/poppins"
+                android:lines="1"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tVItemName"
+                app:layout_constraintStart_toStartOf="@+id/tVItemName"
+                app:layout_constraintTop_toBottomOf="@+id/tVItemName" />
+
+            <TextView
+                android:id="@+id/tVItemName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iVperItem"
+                app:layout_constraintStart_toStartOf="@+id/iVperItem"
+                app:layout_constraintTop_toBottomOf="@+id/iVperItem"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton3"
         android:layout_width="wrap_content"
@@ -18,75 +76,44 @@
         android:layout_marginBottom="20dp"
         android:clickable="true"
         android:contentDescription="@string/Hello"
-        app:backgroundTint="#000000"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_baseline_edit_24" />
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        android:focusable="true" />
 
-    <ImageView
-        android:id="@+id/iVperItem"
-        android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:scaleType="centerCrop"
-        android:layout_alignParentStart="true"
-        android:contentDescription="@string/item_picture"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iVperItem"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="20dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tVItemName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="TextView"
-            android:textColor="#000000"/>
-
-        <TextView
-            android:id="@+id/tVTimeStamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:fontFamily="@font/poppins"
-            android:text="TextView" />
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/imageButton3"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/detailItemBackButton"
         android:layout_width="50dp"
-        android:minWidth="48dp"
         android:layout_height="50dp"
-        android:minHeight="48dp"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="?attr/colorPrimary"
         android:contentDescription="@string/backButton"
-        android:background="@drawable/button_background"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
+        android:foreground="@drawable/button_selector"
+        app:icon="@drawable/ic_baseline_arrow_back_24"
+        app:iconGravity="textStart"
+        app:iconPadding="2dp"
+        app:iconSize="24dp" />
 
     <FrameLayout
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:elevation="18dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
-            android:id="@+id/progressBar"
             style="@android:style/Widget.Material.ProgressBar.Large"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:indeterminate="true" />
     </FrameLayout>
+
 </RelativeLayout>

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mybox.R
-import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
+import com.example.mybox.utils.convertTimestampToISOString
 
 class CategoryDetailAdapter(
     private val onClick: (DetailModel) -> Unit
@@ -23,11 +23,12 @@ class CategoryDetailAdapter(
         private val timeStamp: TextView = itemView.findViewById(R.id.tVItemTimeStamp)
 
         lateinit var getDetailBox: DetailModel
+
         fun bind(item: DetailModel){
-            title.text = item.Name
-            timeStamp.text = item.timeStamp.toString()
+            title.text = item.name
+            timeStamp.text = item.timeStamp?.let { convertTimestampToISOString(it) }
             Glide.with(itemView.context)
-                .load(item.ImageURL)
+                .load(item.imageURL)
                 .into(picture as ImageView)
 
             itemView.setOnClickListener {
@@ -48,7 +49,16 @@ class CategoryDetailAdapter(
         val detailBox = getItem(position)
         if (detailBox != null) {
             holder.bind(detailBox)
+            holder.getDetailBox = detailBox
         }
+    }
+
+    fun removeItem(position: Int) {
+        val currentList = ArrayList(currentList)
+        currentList.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemChanged(position)
+        submitList(currentList)
     }
 
     companion object {
@@ -64,5 +74,4 @@ class CategoryDetailAdapter(
         }
 
     }
-
 }

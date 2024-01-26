@@ -9,6 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,58 +21,32 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvRegister_Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/poppins_semibold"
-                android:textColor="#FF000000"
                 android:textSize="24sp"
-                android:text="New Here?" />
+                android:text="@string/register_title" />
 
             <TextView
-                android:id="@+id/tvRegister_Description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/poppins"
                 android:textSize="16sp"
-                android:text="You can Register First!" />
+                android:text="@string/register_msg" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="61dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="E-mail"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
-                app:boxStrokeWidthFocused="2dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etRegister_Username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout2"
+                android:id="@+id/tilRegisterUsername"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:hint="Password"
+                android:hint="@string/register_username_hint"
                 app:boxCornerRadiusBottomEnd="10dp"
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
@@ -79,9 +54,66 @@
                 app:boxStrokeWidthFocused="2dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etRegister_Password"
+                    android:id="@+id/etRegisterUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:elegantTextHeight="true"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRegisterEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/register_email_hint"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxStrokeWidthFocused="2dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:elegantTextHeight="true"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRegisterPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:hint="@string/register_password_hint"
+                app:endIconMode="password_toggle"
+                app:endIconDrawable="@drawable/ic_visibility_off_24"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:boxStrokeWidthFocused="2dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:elegantTextHeight="true"
+                    android:inputType="textPassword"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -94,17 +126,14 @@
                 android:layout_marginVertical="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:backgroundTint="#4AC9E3"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_semibold"
                 android:letterSpacing="0"
                 android:paddingTop="11dp"
                 android:paddingBottom="11dp"
-                android:text="Register"
+                android:text="@string/register"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="#FF000000"
-                android:textFontWeight="600"
                 android:textSize="16sp"
                 app:cornerRadius="20dp" />
 
@@ -117,23 +146,22 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvLogin_regis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:textColor="#FF000000"
                     android:textSize="16sp"
-                    android:text="Already have Account? " />
+                    android:text="@string/login_quest" />
 
                 <TextView
-                    android:id="@+id/tvLogin_regisBt"
+                    android:id="@+id/tvLoginRegisBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
                     android:clickable="true"
-                    android:textSize="16sp"
-                    android:textColor="#4AC9E3"
-                    android:text="Log in" />
+                    android:textSize="18sp"
+                    android:paddingHorizontal="4dp"
+                    android:text="@string/login_textButton"
+                    android:focusable="true" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -142,7 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="18dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,9 +179,9 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="@android:style/Widget.Material.ProgressBar.Large"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:indeterminate="true" />
     </FrameLayout>
 

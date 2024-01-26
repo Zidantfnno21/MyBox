@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.addCategoryScreen.CameraActivity">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/flipButton"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:contentDescription="@string/flip_camera"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:icon="@drawable/ic_flip_camera"
+        app:iconGravity="textStart"
+        app:iconSize="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/snapButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/snapButton"
+        app:layout_constraintTop_toTopOf="@+id/snapButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/snapButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="@string/snap"
+        app:icon="@drawable/ic_snap"
+        app:iconSize="0dp"
+        app:backgroundTint="?attr/colorPrimary"
+        app:iconGravity="top"
+        app:rippleColor="#324E53"
+        android:foreground="@drawable/button_selector"
+        app:iconTint="@null"
+        android:background="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="@+id/viewFinder"
+        app:layout_constraintEnd_toEndOf="@+id/viewFinder"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/flash"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:contentDescription="@string/flash_option"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        app:icon="@drawable/ic_flash_off"
+        app:iconGravity="textStart"
+        app:iconSize="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/snapButton"
+        app:layout_constraintEnd_toStartOf="@+id/snapButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/snapButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/close"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:contentDescription="@string/close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        app:icon="@drawable/ic_close"
+        app:iconGravity="textStart"
+        app:iconSize="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/flash"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

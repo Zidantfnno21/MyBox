@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
 
-        <item name="color">#FFFFFF</item>
-    </style>
-    <style name="NoTitleTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-    </style>
-    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">#000000</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:paddingTop">11dp</item>
-        <item name="android:paddingBottom">11dp</item>
-        <item name="android:fontFamily">@font/poppins_semibold</item>
-        <item name="android:gravity">center</item>
-        <item name="textAllCaps">false</item>
-
+    <style name="RoundShapeTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@drawable/rounded_shape</item>
+        <item name="shapeAppearanceMediumComponent">@style/RoundShapeAppearance</item>
     </style>
 
-    <style name="CustomFormStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:textColor">#000000</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:font">@font/poppins</item>
-        <item name="fontFamily">@font/poppins</item>
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
+    <style name="DialogAnimation" parent="android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
-    <style name="Roundedbmp">
+    <style name="RoundShapeAppearance" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">10%</item>
-        <item name="color">#ffffff</item>
+        <item name="cornerSize">20dp</item>
     </style>
+
+    <style name="selectableTextView" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+
+    <style name="Widget.MaterialComponents.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="tint">?colorOnSurface</item>
+        <!--Alpha can be added optionally to achieve nice color blend-->
+        <item name="android:alpha">0.7</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
 </resources>

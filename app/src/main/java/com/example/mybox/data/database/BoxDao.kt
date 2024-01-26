@@ -10,17 +10,27 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.mybox.data.model.CategoryModel
-import com.example.mybox.data.model.CategoryWithDetails
+import com.example.mybox.data.model.CategoryWithDetail
 
 @Dao
 interface BoxDao {
 
+    @Query("SELECT * FROM Category")
+    fun getCategories(): LiveData<List<CategoryModel>>
+
     @Transaction
-    @Query("SELECT * FROM boxCategory")
-    suspend fun getCategoriesWithDetails(): List<CategoryWithDetails>
+    @Query("SELECT * FROM Category")
+    fun getCategoriesWithDetails(): LiveData<List<CategoryWithDetail>>
+
+    @Transaction
+    @Query("SELECT * FROM Category WHERE id = :categoryId")
+    fun getCategoryWithDetailsById(categoryId: Int): LiveData<CategoryWithDetail>
+
+    @Query("select * from Category where id = :id")
+    fun getCategoriesById(id: Int): LiveData<CategoryModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCategory(category: LiveData<CategoryModel>)
+    suspend fun insertCategory(category : List<CategoryModel>)
 
     @Delete
     fun delete(box : CategoryModel)

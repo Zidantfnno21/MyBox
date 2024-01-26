@@ -4,7 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".settings.SettingsActivity">
+    tools:context=".settings.SettingsActivity"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="?attr/colorPrimary"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButtonSettings"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/backButton"
+                app:backgroundTint="?attr/colorPrimary"
+                app:cornerRadius="200dp"
+                app:icon="@drawable/ic_baseline_arrow_back_24"
+                app:iconGravity="textEnd"
+                app:iconPadding="7dp"
+                app:iconSize="24dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingVertical="0dp"
+                android:text="@string/settings"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/settings"

@@ -1,55 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    style="@style/Widget.Material3.BottomSheet"
+    android:orientation="vertical">
 
-    >
-
-    <ImageView
-        android:id="@+id/imageView2"
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_baseline_drag_handle_24" />
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textViewCard"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20sp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="34dp"
-        android:fontFamily="@font/poppins_bold"
-        android:textColor="#000000"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btEdit"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="4dp"
-            android:text="Edit"
-            style="@style/CustomButtonStyle"
-            android:background="@drawable/button_shape"/>
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:layout_weight="1"
-            style="@style/CustomButtonStyle"
-            android:background="@drawable/sec_button_shape"
-            android:text="Delete" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/bottomSheet_CategoryInfo"
+                style="@style/selectableTextView"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="100dp"
+                android:elegantTextHeight="true"
+                android:text="@string/box_s_title"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="15dp"
+                android:fontFamily="@font/poppins"
+                android:textSize="16sp"
+                android:drawablePadding="20dp"
+                app:drawableStartCompat="@drawable/thumbnail_countainer" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/bottomSheet_Edit"
+                style="@style/selectableTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_box_s"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="15dp"
+                android:drawablePadding="20dp"
+                app:drawableStartCompat="@drawable/ic_baseline_edit_24"
+                app:drawableLeftCompat="@drawable/ic_baseline_edit_24" />
+
+            <TextView
+                android:id="@+id/bottomSheet_Delete"
+                style="@style/selectableTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_box_s"
+                android:fontFamily="@font/poppins_semibold"
+                android:textSize="16sp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="15dp"
+                android:layout_marginBottom="10dp"
+                android:drawablePadding="20dp"
+                app:drawableStartCompat="@drawable/ic_delete_24"
+                app:drawableLeftCompat="@drawable/ic_delete_24" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
