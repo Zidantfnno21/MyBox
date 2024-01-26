@@ -57,7 +57,7 @@ class CategoryDetailAdapter(
         val currentList = ArrayList(currentList)
         currentList.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemChanged(position)
+        notifyItemRangeRemoved(position, currentList.size)
         submitList(currentList)
     }
 

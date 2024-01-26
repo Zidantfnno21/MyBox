@@ -76,8 +76,6 @@ class BoxRepository(
                 )
 
                 userRef.child("personal_data").setValue(userData).await()
-            } ?: run {
-                emit(Result.Error("Registration Failed"))
             }
         }catch (e: Exception){
             emit(Result.Error(handleAuthException(e)))
@@ -245,9 +243,9 @@ class BoxRepository(
                 id = nextKey
             )
 
-            newCategoryRef.setValue(
-                categoryWithKey
-            ).await()
+//            newCategoryRef.setValue(
+//                categoryWithKey
+//            ).await()
 
             val imageUrl = if (fileImage.scheme == "file") {
                 val fileRef: StorageReference = FirebaseStorage
@@ -267,7 +265,14 @@ class BoxRepository(
             }
 
             val updatedCategory = categoryWithKey.copy(imageURL = imageUrl)
-            newCategoryRef.setValue(updatedCategory).await()
+            val updatedMap = mapOf(
+                "id" to updatedCategory.id,
+                "name" to updatedCategory.name,
+                "description" to updatedCategory.description,
+                "imageURL" to updatedCategory.imageURL
+            )
+
+            newCategoryRef.updateChildren(updatedMap).await()
 
             boxDatabase.boxDao().insertCategory(listOf(updatedCategory))
 
@@ -278,7 +283,6 @@ class BoxRepository(
             Log.e("BoxRepository", "addNewCategory: ${e.message.toString()}")
             throw  e
         }
-
     }
 
     suspend fun addNewDetailItem(

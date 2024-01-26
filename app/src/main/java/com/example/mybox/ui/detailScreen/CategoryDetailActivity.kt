@@ -202,6 +202,8 @@ class CategoryDetailActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
+                        category = result.data
+
                         Glide.with(this)
                             .load(result.data.imageURL)
                             .into(binding.imageView4)
@@ -303,9 +305,7 @@ class CategoryDetailActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder : RecyclerView.ViewHolder , direction : Int) {
                 val detailBox = (viewHolder as CategoryDetailAdapter.ListViewHolder).getDetailBox
                 val position = viewHolder.bindingAdapterPosition
-                detailAdapter.apply {
-                    removeItem(position)
-                }
+                detailAdapter.removeItem(position)
 
                 viewModel.deleteDetailBox(uid , detailBox , detailBox.categoryId!! , detailBox.id!!)
                 fetchData()

@@ -13,6 +13,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="16dp">
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -24,6 +25,7 @@
                 android:adjustViewBounds="true"
                 android:foregroundGravity="center"
                 android:importantForAccessibility="no"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -65,6 +67,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton3"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -78,6 +81,7 @@
         android:contentDescription="@string/Hello"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/ic_baseline_edit_24"
+        app:tint="?attr/colorSecondaryVariant"
         android:focusable="true" />
 
     <com.google.android.material.button.MaterialButton

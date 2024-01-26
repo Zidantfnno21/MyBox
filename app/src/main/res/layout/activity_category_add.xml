@@ -78,7 +78,6 @@
                     android:fontFamily="@font/poppins"
                     android:imeOptions="actionDone"
                     android:maxLength="50"
-                    android:maxLines="1"
                     android:textSize="16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
