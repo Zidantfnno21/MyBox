@@ -3,8 +3,11 @@ package com.example.mybox.utils
 import android.app.Activity
 import android.content.Context
 import android.util.Patterns
+import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.widget.NestedScrollView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,4 +33,17 @@ fun Activity.hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
+}
+
+fun scrollToShowView(scrollView : NestedScrollView , view : View) {
+    scrollView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+            scrollView.viewTreeObserver.removeOnPreDrawListener(this)
+            scrollView.post {
+                scrollView.smoothScrollTo(0, view.bottom)
+            }
+
+            return true
+        }
+    })
 }

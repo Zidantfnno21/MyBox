@@ -56,8 +56,6 @@ class CategoryDetailAdapter(
     fun removeItem(position: Int) {
         val currentList = ArrayList(currentList)
         currentList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeRemoved(position, currentList.size)
         submitList(currentList)
     }
 

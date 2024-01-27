@@ -5,14 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/addItemScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:fillViewport="true"
+
         android:fitsSystemWindows="true">
 
         <LinearLayout
+            android:id="@+id/addItemContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"

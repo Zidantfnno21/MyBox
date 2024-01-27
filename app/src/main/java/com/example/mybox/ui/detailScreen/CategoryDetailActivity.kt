@@ -77,6 +77,7 @@ class CategoryDetailActivity : AppCompatActivity() {
 
         categoryId = category.id.toString()
 
+
         binding.imageButtonBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -139,7 +140,6 @@ class CategoryDetailActivity : AppCompatActivity() {
         )
 
         binding.rvDetailPage.apply {
-            setHasFixedSize(true)
             adapter = detailAdapter
             layoutManager = GridLayoutManager(this@CategoryDetailActivity , 2)
             addItemDecoration(
@@ -217,6 +217,7 @@ class CategoryDetailActivity : AppCompatActivity() {
 
                     is Result.Error -> {
                         showLoading(false)
+                        finish()
                         makeToast(this ,result.error)
                     }
                 }
@@ -235,9 +236,10 @@ class CategoryDetailActivity : AppCompatActivity() {
                         val list =  result.data
                         if (list.isEmpty()){
                             showEmptyState(true)
+                            detailAdapter.submitList(list.toList())
                         }else{
                             showEmptyState(false)
-                            detailAdapter.submitList(list)
+                            detailAdapter.submitList(list.toList())
                         }
                     }
 

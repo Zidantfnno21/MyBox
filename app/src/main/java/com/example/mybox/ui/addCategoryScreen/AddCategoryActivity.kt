@@ -9,6 +9,8 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -30,8 +32,10 @@ import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.ChooseImageAction
 import com.example.mybox.utils.PermissionHandler
 import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.hideKeyboard
 import com.example.mybox.utils.makeToast
 import com.example.mybox.utils.reduceFileImage
+import com.example.mybox.utils.scrollToShowView
 
 class AddCategoryActivity : AppCompatActivity() {
     private lateinit var binding : ActivityCategoryAddBinding
@@ -122,7 +126,39 @@ class AddCategoryActivity : AppCompatActivity() {
             uploadImage()
         }
 
+        val textInputLayouts = listOf(
+            binding.addTilTitle,
+            binding.addTilDesc,
+        )
+
+        binding.root.viewTreeObserver.addOnPreDrawListener {
+            val rect = android.graphics.Rect()
+            binding.root.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = binding.root.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight <= screenHeight * 0.15) {
+                // Keyboard is closed
+                textInputLayouts.forEach { it.clearFocus() }
+            }
+
+            true
+        }
+
+        textInputLayouts.forEach { til ->
+            til.editText?.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            til.requestFocus()
+                        } , 100
+                    )
+                    scrollToShowView(binding.scrollview, binding.addCategoryContainer)
+                }
+            }
+        }
     }
+
 
     private fun openImageAction() {
         imageChooser.showChooser()
@@ -158,6 +194,8 @@ class AddCategoryActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Success -> {
                         showLoading(false)
+
+                        hideKeyboard()
 
                         makeToast(this, "Success Creating Category")
 

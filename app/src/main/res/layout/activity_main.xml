@@ -11,7 +11,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/relativeLayoutMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -152,9 +153,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/disposableCardView" />
+                app:layout_constraintTop_toBottomOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -164,17 +166,17 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true" >
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:contentScrim="@android:color/transparent"
             app:collapsedTitleGravity="center"
+            app:contentScrim="@android:color/transparent"
             app:expandedTitleGravity="center"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -195,9 +197,9 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/backButtonSearch"
                         style="@style/Widget.Material3.Button.Icon"
-                        android:layout_marginHorizontal="4dp"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_marginHorizontal="4dp"
                         android:contentDescription="@string/backButton"
                         android:focusable="true"
                         android:padding="4dp"
@@ -305,10 +307,10 @@
                     android:elegantTextHeight="true"
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins"
-                    android:textColor="?attr/colorOnSurface"
                     android:maxLength="50"
                     android:maxLines="1"
                     android:text="@string/greetings"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="24sp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -317,12 +319,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvGreetings"
                     android:layout_marginStart="20dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="8dp"
                     android:elegantTextHeight="true"
                     android:fontFamily="@font/poppins_semibold"
-                    android:textColor="?attr/colorOnSurface"
                     android:text="@string/header"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="42sp" />
 
             </RelativeLayout>

@@ -106,16 +106,13 @@ class MainScreenAdapter(
     fun removeItem(position: Int) {
         val currentList = ArrayList(currentList)
         currentList.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemChanged(position)
         submitList(currentList)
     }
 
     var fullList: List<CategoryModel> = listOf()
-
     fun submitFullList(list: List<CategoryModel>) {
         fullList = list
-        submitList(fullList)
+        submitList(fullList.toList())
     }
 
     fun getFilter(): Filter {

@@ -29,8 +29,10 @@ import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.ChooseImageAction
 import com.example.mybox.utils.DETAIL_ID
 import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.hideKeyboard
 import com.example.mybox.utils.makeToast
 import com.example.mybox.utils.reduceFileImage
+import com.example.mybox.utils.scrollToShowView
 import java.util.Calendar
 
 class AddItemActivity : AppCompatActivity() {
@@ -110,16 +112,30 @@ class AddItemActivity : AppCompatActivity() {
             push()
         }
 
+        binding.root.viewTreeObserver.addOnPreDrawListener {
+            val rect = android.graphics.Rect()
+            binding.root.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = binding.root.height
+            val keypadHeight = screenHeight - rect.bottom
 
-        binding.addItemTilTitle.editText?.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                binding.scrollView.post {
-                    binding.scrollView.fullScroll(v.bottom)
-                }
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is open
+                binding.addItemTilTitle.requestFocus()
+            } else {
+                // Keyboard is closed
+                binding.addItemTilTitle.clearFocus()
             }
+
+            true
         }
 
+        binding.addItemTilTitle.editText?.setOnFocusChangeListener { _ , hasFocus ->
+            if (hasFocus) {
+                scrollToShowView(binding.addItemScrollView , binding.addItemContainer)
+            }
+        }
     }
+
 
     private fun openImageAction() {
         imageChooser.showChooser()
@@ -156,6 +172,8 @@ class AddItemActivity : AppCompatActivity() {
                 when(result) {
                     is Result.Success -> {
                         showLoading(false)
+
+                        hideKeyboard()
 
                         val notificationIntent = Intent(this, CategoryDetailActivity::class.java)
                         notificationIntent.putExtra(BOX_ID, result.data.categoryId)

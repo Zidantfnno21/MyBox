@@ -1,6 +1,5 @@
 package com.example.mybox.ui.mainScreen
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -103,7 +102,6 @@ class MainActivity : AppCompatActivity() {
         binding.tvGreetings.text = getString(R.string.greetings, username)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -112,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         permissionHandler.requestPermissionsIfNecessary()
-
 
         if (!SharedPreferences().isViewVisible(applicationContext)) {
             binding.disposableCardView.isVisible = false
@@ -147,14 +144,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         binding.closeIv.setOnClickListener {
             binding.disposableCardView.isVisible = false
-
             SharedPreferences().saveState(false , applicationContext)
 
             val params = binding.rvMainPage.layoutParams as ConstraintLayout.LayoutParams
-            params.topToBottom = binding.textView2.id
-
             binding.rvMainPage.layoutParams = params
         }
 
@@ -170,10 +165,10 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.rvMainPage.apply {
-            setHasFixedSize(false)
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mainAdapter
             mainAdapter.viewState = SharedPreferences().getView(this@MainActivity)
+
             val space = 16
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect , view: View , parent: RecyclerView , state: RecyclerView.State) {
@@ -191,7 +186,6 @@ class MainActivity : AppCompatActivity() {
 
         val gridClickListener = View.OnClickListener {
             mainAdapter.viewState = (mainAdapter.viewState + 1) % 2
-            mainAdapter.notifyDataSetChanged()
 
             SharedPreferences().saveViewState(mainAdapter.viewState, this)
 
@@ -409,6 +403,7 @@ class MainActivity : AppCompatActivity() {
 
         deleteButton.setOnClickListener {
             mainAdapter.removeItem(position)
+
             viewModel.deleteBox(uid , clickedCategories , clickedCategories.id)
             fetchData()
 
@@ -430,10 +425,10 @@ class MainActivity : AppCompatActivity() {
                         val list =  boxList.data
                         if (list.isEmpty()){
                             showEmptyState(true)
+                            mainAdapter.submitFullList(list)
                         }else{
                             showEmptyState(false)
-                            mainAdapter.submitList(ArrayList(list))
-                            mainAdapter.submitFullList(ArrayList(list))
+                            mainAdapter.submitFullList(list)
                         }
 
                     }
