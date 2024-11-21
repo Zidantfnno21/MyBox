@@ -1,36 +1,73 @@
-**My BOX**
+# **My Box - Project Documentation**
 
-This Project called My box, so basically user can creating bunch of category and each category also have theirs own item. Using MVVM (Model-View-Viewmodel) to creating this because wanna make more understanding in thoose architectures and learn more about Android Development using Kotlin.
+## **Overview**
 
-- **Firebase Storage** used to keep the img from user,
+**My Box** is an Android application that allows users to create, manage, and organize categories (called Boxes) and items within those categories. The app is designed using the **MVVM** architecture to help maintain a clean separation between UI and business logic, making the app more maintainable and scalable.
 
-- **Firebase Realtime Databases** used to be back-end of the project, If you ask me why not using firestore, I will ask the same to my self lol
-So the realtime db nodes I've been done are like this,
+This project uses several Firebase services:
+- **Firebase Storage** to store user-uploaded images.
+- **Firebase Realtime Database** to store category and item data.
+- **Firebase Authentication** to securely manage user sign-ins and ensure data privacy.
+
+### **Key Features:**
+- **Category Creation**: Users can create custom categories (Boxes) displayed on the main screen.
+- **Item Management**: Users can add, update, and delete items inside categories.
+- **User Authentication**: Firebase Auth is used for secure user login, allowing personalized data and greetings.
+- **Data Storage**: Firebase Realtime Database stores user data, ensuring each user's data is isolated and secure.
+  
+
+## **Architecture**
+The app follows the **MVVM (Model-View-ViewModel)** architecture, which separates the user interface (View) from the underlying logic (Model) through the ViewModel. This approach makes it easier to manage state, handle complex logic, and test different components of the app.
+
+## **Technologies Used**
+- **Kotlin**: Programming language used to build the app.
+- **Firebase Authentication**: Manages user authentication and security.
+- **Firebase Realtime Database**: Stores user data, categories, and items in real time.
+- **Firebase Storage**: Stores images uploaded by users.
+
+## **Firebase Database Structure**
+The Realtime Database is structured as follows: 
+
+users -> {UID} -> categories -> {categoryId} -> items -> {itemId}
 
 ![image](https://github.com/Zidantfnno21/MyBox/assets/98997038/bf4edf5c-a8d7-4b36-9032-1d3b5d2f4f0f)
 
-- **Firebase Auth** for interact with the realtime db so it can be "safe" and another reason for using auth in this project are to grouping each user category/items and data like names/email by the UID that's the firebase auth provides.
+### **Explanation**:
+- **users**: The top-level node where all user data is stored. Each user is identified by their **UID** (unique user ID) provided by Firebase Authentication.
+- **{UID}**: Each user’s data is stored under their unique UID, ensuring that data is isolated and private for each user.
+- **categories**: Under each user’s UID, there is a **categories** node, which contains all the categories (or "Boxes") that the user has created.
+- **{categoryId}**: Each category is identified by a unique **categoryId**.
+- **items**: Inside each category, there is an **items** node, where the individual items within that category are stored.
+- **{itemId}**: Each item is identified by a unique **itemId** within the category.
 
-If you wonder why using personal data for user, I just want to make greetings in the main screen of the apps like this.
+## **How to Run the App Locally**
 
-![image](https://github.com/Zidantfnno21/MyBox/assets/98997038/62142372-2530-4f49-b01d-5115b3ed7fea)
+To run this app on your local machine, follow these steps:
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Zidantfnno21/MyBox.git
+2. Open the project in Android Studio.
+3. Make sure you have the required Firebase services set up:
+   * Create a project in the Firebase Console.
+   * Set up Firebase Authentication, Firebase Realtime Database, and Firebase Storage in the console.
+   * Download the **google-services.json** file and add it to the `app` folder of your project.
+4. Build and run the app on your Android device or emulator.
 
-**Demos**
+## **App Features & Demos**
 
-_create category_
-Users can create their own Box / Category to be shown in the first page of the Applications.
-https://github.com/Zidantfnno21/MyBox/assets/98997038/a34a8640-996b-4f0b-8e8b-93b231495850
+### **1. Create Category (Box)**
+Users can create their own categories, which are displayed on the main screen.
+- **Demo**: [Create Category](https://github.com/Zidantfnno21/MyBox/assets/98997038/a34a8640-996b-4f0b-8e8b-93b231495850)
 
-_create items_
-Inside Category there's also items that can be created by user.
-https://github.com/Zidantfnno21/MyBox/assets/98997038/aaa95789-3d17-425d-813f-d0db4dce651e
+### **2. Create Item**
+Once a category is created, users can add items to that category.
+- **Demo**: [Create Item](https://github.com/Zidantfnno21/MyBox/assets/98997038/aaa95789-3d17-425d-813f-d0db4dce651e)
 
-_update_
-If users make mistake or want to update the items/category, it is possible by pressing the update button.
-https://github.com/Zidantfnno21/MyBox/assets/98997038/ce00d6cb-98cd-4810-839d-7180976026be
+### **3. Update Items/Category**
+Users can update their items or categories by pressing the "update" button.
+- **Demo**: [Update Item/Category](https://github.com/Zidantfnno21/MyBox/assets/98997038/ce00d6cb-98cd-4810-839d-7180976026be)
 
-_delete_
-And also user can delete the items/category by pressing delete button.
-https://github.com/Zidantfnno21/MyBox/assets/98997038/38137768-efda-4b7f-b4df-a5888bd17e7a
-
+### **4. Delete Items/Category**
+Users can delete items or categories by pressing the "delete" button.
+- **Demo**: [Delete Item/Category](https://github.com/Zidantfnno21/MyBox/assets/98997038/38137768-efda-4b7f-b4df-a5888bd17e7a)
