@@ -14,5 +14,6 @@ data class CategoryModel(
     val name : String? = "",
     val description : String? = "" ,
     val imageURL : String? = "" ,
+    val isSynced: Boolean = false,
 ) : Parcelable
 

@@ -27,5 +27,6 @@ data class DetailModel(
     val categoryId : Int? = 0,
     val name : String? = "",
     val timeStamp : Long? = 0 ,
-    val imageURL : String? = ""
+    val imageURL : String? = "",
+    val isSynced: Boolean = false,
 ) : Parcelable

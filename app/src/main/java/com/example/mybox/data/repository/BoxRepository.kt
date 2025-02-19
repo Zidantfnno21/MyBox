@@ -1,14 +1,20 @@
-package com.example.mybox.data
+package com.example.mybox.data.repository
 
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
+import com.example.mybox.data.Result
 import com.example.mybox.data.database.BoxDatabase
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
 import com.example.mybox.data.model.UserModel
+import com.example.mybox.utils.FileUtils
+import com.example.mybox.utils.NetworkUtils
+import com.example.mybox.utils.PreferencesHelper
+import com.example.mybox.utils.SyncScheduler
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -21,17 +27,24 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executor
+import javax.inject.Inject
 
-class BoxRepository(
-    private val boxDatabase : BoxDatabase,
-    private val executor: ExecutorService
+class BoxRepository @Inject constructor(
+    private val fileUtils: FileUtils,
+    private val networkUtils: NetworkUtils,
+    private val boxDatabase: BoxDatabase,
+    private val executor: Executor,
+    private val syncScheduler: SyncScheduler,
+    private val preferencesHelper: PreferencesHelper,
 ) {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val storage = FirebaseStorage.getInstance().reference
     private val usersReference: DatabaseReference = Firebase.database.getReference("Users")
     private fun uidRef(uid: String) = usersReference.child(uid)
     private val _uploadProgress = MutableLiveData<Int>()
+    private val uid = preferencesHelper.getSavedUid()
+
     val uploadProgress: LiveData<Int>
         get() = _uploadProgress
 
@@ -96,6 +109,7 @@ class BoxRepository(
             val dataByUID = snapshot.getValue(UserModel::class.java)
 
             if (dataByUID != null) {
+                preferencesHelper.saveUid(uid)
                 emit(Result.Success(dataByUID))
             }else{
                 emit(Result.Error("User data not found for UID: $uid"))
@@ -117,18 +131,39 @@ class BoxRepository(
     }
 
     //read
-    fun getAllBox(uid: String): LiveData<Result<List<CategoryModel>>> = liveData {
+    fun getAllBox(
+        uid: String,
+        lastKey: String?,
+        size: Int,
+    ): LiveData<Result<List<CategoryModel>>> = liveData {
         emit(Result.Loading)
         try {
-            val uidRef = usersReference.child(uid)
+            val uidRef = usersReference.child(uid).child("Category")
+            val query = if (lastKey == null) {
+                uidRef.orderByKey().limitToFirst(size)
+            } else {
+                uidRef.orderByKey().startAfter(lastKey).limitToFirst(size)
+            }
 
-            val snapshot = uidRef.child("Category").get().await()
+            val snapshot = query.get().await()
 
             val boxes = snapshot.children.mapNotNull { categorySnapshot->
                 categorySnapshot.getValue(CategoryModel::class.java)
             }
-            boxDatabase.boxDao().insertCategory(boxes)
-            emit(Result.Success(boxes))
+
+            if (boxes.isNotEmpty()) {
+                boxDatabase.boxDao().insertCategory(boxes)
+                emitSource(
+                    boxDatabase.boxDao().getCategories().map { list ->
+                        Result.Success(list)
+                    }
+                )
+            } else {
+                emit(
+                    Result.Success(emptyList()),
+                )
+            }
+
         }catch (e: Exception) {
             Log.e("BoxRepository", "getAllBox: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
@@ -150,8 +185,11 @@ class BoxRepository(
             val boxById = snapshot.getValue(CategoryModel::class.java)
 
             if (boxById != null) {
-                boxDatabase.boxDao().getCategoriesById(id)
-                emit(Result.Success(boxById))
+                emitSource(
+                    boxDatabase.boxDao().getCategoriesById(id).map { list->
+                        Result.Success(list)
+                    }
+                )
             } else {
                 emit(Result.Error("Failed to parse data"))
             }
@@ -179,7 +217,11 @@ class BoxRepository(
             }
 
             boxDatabase.detailDao().insertDetails(detailItems)
-            emit(Result.Success(detailItems))
+            emitSource(
+                boxDatabase.detailDao().getDetailsByCategoryId(categoryId = categoryId).map { list->
+                    Result.Success(list)
+                }
+            )
         }catch (e: Exception) {
             Log.e("BoxRepository", "getAllDetailBox: ${e.message.toString()}")
             emit(Result.Error(e.message ?: "An error occurred"))
@@ -202,12 +244,19 @@ class BoxRepository(
                 .await()
 
             if (itemSnapshot.exists()) {
-                val detailItem = itemSnapshot.getValue(DetailModel::class.java)
+                val detailItem = itemSnapshot.children.mapNotNull { boxItemSnapshot->
+                    boxItemSnapshot.getValue(DetailModel::class.java)
+                }
 
-                detailItem?.let {
-                    emit(Result.Success(detailItem))
-                } ?: kotlin.run {
-                    emit(Result.Error("Something not right :("))
+                detailItem.let {
+                    boxDatabase.detailDao().insertDetails(detailItem)
+                    emitSource(
+                        boxDatabase.detailDao()
+                            .getDetailsByCategoryIdAndIds(categoryId = categoryId, boxId = id)
+                            .map { list->
+                                Result.Success(list)
+                        }
+                    )
                 }
             } else {
                 emit(Result.Error("Something not right :("))
@@ -221,18 +270,18 @@ class BoxRepository(
 
     //create-update
     suspend fun addNewCategories(
-        uid : String ,
         category : CategoryModel ,
         fileImage : Uri
-    ): CategoryModel {
+    ): Result<Unit> {
         try {
+            /*
             val snapshot = uidRef(uid).child("Category").get().await()
 
             val nextKey = if (!snapshot.exists() || category.id == 0 ) {
                 val maxKey = snapshot.children.maxOfOrNull { it.key?.toInt() ?: 0 } ?: 0
                 maxKey + 1
             } else {
-                category.id //if item edit will returned the previous id
+                category.id
             }
 
             val newCategoryRef = uidRef(uid).child(
@@ -240,12 +289,9 @@ class BoxRepository(
             ).child(nextKey.toString())
 
             val categoryWithKey = category.copy(
-                id = nextKey
+                id = nextKey,
+                isSynced = false
             )
-
-//            newCategoryRef.setValue(
-//                categoryWithKey
-//            ).await()
 
             val imageUrl = if (fileImage.scheme == "file") {
                 val fileRef: StorageReference = FirebaseStorage
@@ -264,7 +310,7 @@ class BoxRepository(
                 fileImage.toString()
             }
 
-            val updatedCategory = categoryWithKey.copy(imageURL = imageUrl)
+            val updatedCategory = categoryWithKey.copy(imageURL = imageUrl, isSynced = true)
             val updatedMap = mapOf(
                 "id" to updatedCategory.id,
                 "name" to updatedCategory.name,
@@ -278,10 +324,28 @@ class BoxRepository(
 
             Log.d("BoxRepository", "New category added successfully.")
 
-            return updatedCategory
+            return Result.Success(Unit)
+
+            */
+
+            /// new approach
+            val nextKey = (boxDatabase.boxDao().getMaxCategoryId() ?: 0) + 1
+            val cachedImagePath = "category_${nextKey}.jpg"
+            fileUtils.createAndWriteToCache(cachedImagePath, fileImage.toString()) { success ->
+                if (!success) Log.e("BoxRepository", "Failed to cache category image.")
+            }
+            val categoryWithKey = category.copy(
+                id = nextKey,
+                imageURL = cachedImagePath,
+                isSynced = false
+            )
+            boxDatabase.boxDao().insertCategory(listOf(categoryWithKey))
+            syncScheduler.scheduleCategorySync()
+            Log.d("BoxRepository", "New category added locally.")
+            return Result.Success(Unit)
         } catch (e: Exception) {
             Log.e("BoxRepository", "addNewCategory: ${e.message.toString()}")
-            throw  e
+            return Result.Error(e.toString())
         }
     }
 
@@ -367,7 +431,11 @@ class BoxRepository(
                         }
                     }
                     .addOnFailureListener { exception ->
-                        deleteBoxLiveData.postValue(Result.Error(exception.message ?: "An error occurred"))
+                        deleteBoxLiveData.postValue(
+                            Result.Error(
+                                exception.message ?: "An error occurred"
+                            )
+                        )
                     }
 
             } catch (e: Exception) {
@@ -414,10 +482,62 @@ class BoxRepository(
                         }
                     }
                     .addOnFailureListener { exception->
-                        deleteBoxItemLiveData.postValue(Result.Error(exception.message ?: "An error occurred"))
+                        deleteBoxItemLiveData.postValue(
+                            Result.Error(
+                                exception.message ?: "An error occurred"
+                            )
+                        )
                     }
             } catch (e: Exception) {
                 deleteBoxItemLiveData.postValue(Result.Error("An error occurred: ${e.message}"))
+            }
+        }
+    }
+
+    suspend fun syncUnsyncedCategories() {
+        if (!networkUtils.isInternetAvailable()) {
+            Log.d("BoxRepository", "No internet, skipping sync.")
+            return
+        }
+
+        val unsyncedCategories = boxDatabase.boxDao().getUnsyncedCategories()
+        for (category in unsyncedCategories) {
+            try {
+                val newCategoryRef = uidRef(uid).child("Category").child(category.id.toString())
+
+                val imageFile = try {
+                    fileUtils.getCached(category.imageURL ?: "")
+                } catch (e: Exception) {
+                    Log.e("BoxRepository", "Failed to read cached image: ${e.message}")
+                    null
+                }
+
+                val imageUrl = if (imageFile != null) {
+                    val fileRef: StorageReference = FirebaseStorage
+                        .getInstance()
+                        .getReference("user_${uid}/image_category/category_${category.id}/image.jpg")
+
+                    fileRef.putFile(Uri.fromFile(imageFile)).await()
+                    fileRef.downloadUrl.await().toString()
+                } else {
+                    category.imageURL
+                }
+
+                val updatedCategory = category.copy(imageURL = imageUrl, isSynced = true)
+                val updatedMap = mapOf(
+                    "id" to updatedCategory.id,
+                    "name" to updatedCategory.name,
+                    "description" to updatedCategory.description,
+                    "imageURL" to updatedCategory.imageURL
+                )
+
+                newCategoryRef.updateChildren(updatedMap).await()
+
+                updatedCategory.id?.let { boxDatabase.boxDao().updateCategorySyncStatus(it, true) }
+
+                Log.d("BoxRepository", "Synced category ${category.id} to Firebase.")
+            } catch (e: Exception) {
+                Log.e("BoxRepository", "Sync error: ${e.message}")
             }
         }
     }

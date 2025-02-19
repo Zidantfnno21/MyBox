@@ -13,12 +13,12 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -35,12 +35,12 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:exported="false"
-            android:parentActivityName=".ui.mainScreen.MainActivity" />
+            android:parentActivityName=".ui.screen.mainScreen.MainActivity" />
         <activity
-            android:name=".ui.auth.registerScreen.RegisterActivity"
+            android:name=".ui.screen.auth.registerScreen.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.auth.loginScreen.LoginActivity"
+            android:name=".ui.screen.auth.loginScreen.LoginActivity"
             android:exported="true"
             android:launchMode="singleInstancePerTask"
             android:theme="@style/Theme.App.Starting" >
@@ -61,12 +61,12 @@
         <activity
             android:name=".ui.detailScreen.CategoryDetailActivity"
             android:exported="false"
-            android:parentActivityName=".ui.mainScreen.MainActivity"/>
+            android:parentActivityName=".ui.screen.mainScreen.MainActivity"/>
         <activity
             android:name=".ui.detailItemScreen.DetailItemActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.mainScreen.MainActivity"
+            android:name=".ui.screen.mainScreen.MainActivity"
             android:exported="false"
             android:label=""
             android:theme="@style/Theme.MyBox.NoActionBar" />

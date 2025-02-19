@@ -29,6 +29,15 @@ interface BoxDao {
     @Query("select * from Category where id = :id")
     fun getCategoriesById(id: Int): LiveData<CategoryModel>
 
+    @Query("SELECT MAX(id) FROM Category")
+    fun getMaxCategoryId(): Int?
+
+    @Query("Select * from Category where isSynced = 1")
+    fun getUnsyncedCategories(): List<CategoryModel>
+
+    @Query("UPDATE Category SET isSynced = :isSynced WHERE id = :categoryId")
+    suspend fun updateCategorySyncStatus(categoryId: Int, isSynced: Boolean)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category : List<CategoryModel>)
 

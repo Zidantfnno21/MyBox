@@ -23,25 +23,26 @@ import com.example.mybox.data.Result
 import com.example.mybox.data.model.DetailModel
 import com.example.mybox.databinding.ActivityItemAddBinding
 import com.example.mybox.notification.NotificationHelper
-import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.detailScreen.CategoryDetailActivity
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.ChooseImageAction
 import com.example.mybox.utils.DETAIL_ID
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.PreferencesHelper
 import com.example.mybox.utils.hideKeyboard
 import com.example.mybox.utils.makeToast
 import com.example.mybox.utils.reduceFileImage
 import com.example.mybox.utils.scrollToShowView
 import java.util.Calendar
+import javax.inject.Inject
 
 class AddItemActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
+
     private lateinit var binding : ActivityItemAddBinding
     private lateinit var notificationHelper : NotificationHelper
     private val imageChooser = ChooseImageAction(this)
-    private val viewModel by viewModels<AddItemViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private val viewModel:AddItemViewModel by viewModels()
     private var globalCategoryId: Int? = 0
     private var globalItemId: Int? = 0
     private var getFile: Uri? = null
@@ -142,7 +143,7 @@ class AddItemActivity : AppCompatActivity() {
     }
 
     private fun push() {
-        val uid = SharedPreferences().getSavedUsername(this)
+        val uid = preferencesHelper.getSavedUsername()
         val title = binding.addItemEtTitle.text.toString()
         if (title.isEmpty()) binding.addItemTilTitle.error = "Title Cannot Empty"
 

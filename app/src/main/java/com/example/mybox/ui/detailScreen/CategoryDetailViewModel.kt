@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mybox.R
-import com.example.mybox.data.BoxRepository
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.data.model.DetailModel
+import com.example.mybox.data.repository.BoxRepository
 import com.example.mybox.utils.Event
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CategoryDetailViewModel(private val boxRepository : BoxRepository) : ViewModel() {
+class CategoryDetailViewModel @Inject constructor(private val boxRepository : BoxRepository) : ViewModel() {
     private val _snackBarText = MutableLiveData<Event<Int>>()
     val snackBarText: LiveData<Event<Int>> = _snackBarText
 

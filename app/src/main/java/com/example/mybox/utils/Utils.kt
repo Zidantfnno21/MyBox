@@ -47,3 +47,5 @@ fun scrollToShowView(scrollView : NestedScrollView , view : View) {
         }
     })
 }
+
+

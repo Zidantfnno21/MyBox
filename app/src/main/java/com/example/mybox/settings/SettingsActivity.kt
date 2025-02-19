@@ -13,15 +13,17 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.mybox.R
 import com.example.mybox.databinding.ActivitySettingsBinding
-import com.example.mybox.ui.ViewModelFactory
-import com.example.mybox.ui.auth.loginScreen.LoginActivity
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.ui.screen.auth.loginScreen.LoginActivity
+import com.example.mybox.utils.PreferencesHelper
+import javax.inject.Inject
 
 class SettingsActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
     private lateinit var binding : ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val savedTheme = SharedPreferences().getTheme(this)
+        val savedTheme = preferencesHelper.getTheme()
         AppCompatDelegate.setDefaultNightMode(savedTheme)
 
         super.onCreate(savedInstanceState)
@@ -44,9 +46,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
-        private val viewModel by viewModels<SettingsViewModel> {
-            ViewModelFactory.getInstance(requireContext())
-        }
+        private val viewModel: SettingsViewModel by viewModels()
+        @Inject
+        lateinit var preferencesHelper: PreferencesHelper
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -61,7 +63,8 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 updateTheme(nightMode)
 
-                SharedPreferences().saveTheme(nightMode , requireContext())
+
+                preferencesHelper.saveTheme(nightMode)
                 true
             }
 
@@ -85,7 +88,7 @@ class SettingsActivity : AppCompatActivity() {
             logOutButton.setOnClickListener {
                 viewModel.logOut()
 
-                SharedPreferences().logOut(requireContext())
+                preferencesHelper.logOut()
 
                 val loginIntent = Intent(requireContext(), LoginActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)

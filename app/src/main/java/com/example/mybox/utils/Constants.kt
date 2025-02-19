@@ -11,6 +11,7 @@ const val TOKEN_KEY = "token_key"
 const val STATE_KEY = "state_key"
 const val USER_KEY = "user_key"
 const val STATUS_KEY = "status_key"
+const val UID_KEY = "UID"
 const val RV_VIEW_KEY = "change_view_key"
 
 const val REQUEST_CODE_PERMISSIONS = 10

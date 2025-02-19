@@ -29,7 +29,6 @@ import com.example.mybox.R
 import com.example.mybox.data.Result
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.databinding.ActivityCategoryDetailBinding
-import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
 import com.example.mybox.ui.addItemScreen.AddItemActivity
 import com.example.mybox.ui.detailItemScreen.DetailItemActivity
@@ -37,22 +36,23 @@ import com.example.mybox.utils.BOX
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.DETAIL_ID
 import com.example.mybox.utils.Event
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.PreferencesHelper
 import com.example.mybox.utils.makeToast
 import com.google.android.material.snackbar.Snackbar
+import javax.inject.Inject
 
 
 class CategoryDetailActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
     private lateinit var binding : ActivityCategoryDetailBinding
     private lateinit var detailAdapter : CategoryDetailAdapter
-    private val viewModel by viewModels<CategoryDetailViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private val viewModel : CategoryDetailViewModel by viewModels()
     private lateinit var category: CategoryModel
     private lateinit var categoryId: String
     private val uid: String by lazy {
         try {
-            SharedPreferences().getSavedUsername(this@CategoryDetailActivity)
+            preferencesHelper.getSavedUsername()
         } catch (e: Exception) {
             e.printStackTrace()
             "username" // Provide a default value or handle the exception as per your requirements

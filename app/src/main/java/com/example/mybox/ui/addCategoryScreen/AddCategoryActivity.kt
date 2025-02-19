@@ -25,28 +25,30 @@ import com.example.mybox.data.Result
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.databinding.ActivityCategoryAddBinding
 import com.example.mybox.notification.NotificationHelper
-import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.detailScreen.CategoryDetailActivity
 import com.example.mybox.utils.BOX
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.ChooseImageAction
 import com.example.mybox.utils.PermissionHandler
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.PreferencesHelper
 import com.example.mybox.utils.hideKeyboard
 import com.example.mybox.utils.makeToast
 import com.example.mybox.utils.reduceFileImage
 import com.example.mybox.utils.scrollToShowView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AddCategoryActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
     private lateinit var binding : ActivityCategoryAddBinding
     private lateinit var notificationHelper : NotificationHelper
     private val permissionHandler = PermissionHandler(this)
     private val imageChooser = ChooseImageAction(this)
     private var getFile: Uri? = null
     private var globalCategoryId: Int? = 0
-    private val viewModel by viewModels<AddCategoryViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private val viewModel: AddCategoryViewModel by viewModels()
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -165,7 +167,7 @@ class AddCategoryActivity : AppCompatActivity() {
     }
 
     private fun uploadImage() {
-        val uid = SharedPreferences().getSavedUsername(this)
+        val uid = preferencesHelper.getSavedUsername()
 
         val titleText = binding.addEtTitle.text.toString()
         if (titleText.isEmpty()) binding.addTilTitle.error = "Title cannot Empty"
@@ -189,32 +191,8 @@ class AddCategoryActivity : AppCompatActivity() {
 
         if (compressedImg != null && binding.addEtTitle.text !!.isNotEmpty() && uid.isNotEmpty()) {
             notificationHelper.showProgressNotification(0)
-
-            viewModel.postCategory(uid , compressedImg , model) { result->
+            viewModel.postCategory(compressedImg,model) { result ->
                 when (result) {
-                    is Result.Success -> {
-                        showLoading(false)
-
-                        hideKeyboard()
-
-                        makeToast(this, "Success Creating Category")
-
-                        val notificationIntent = Intent(this, CategoryDetailActivity::class.java)
-                        notificationIntent.putExtra(BOX, result.data)
-
-                        val pendingIntent = TaskStackBuilder.create(this).run {
-                            addNextIntentWithParentStack(notificationIntent)
-                            getPendingIntent(
-                                0,
-                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                            )
-                        }
-
-                        notificationHelper.dismissNotification()
-                        notificationHelper.updateNotification("Your Category Box's is ready!", pendingIntent)
-
-                        onBackPressedDispatcher.onBackPressed()
-                    }
                     is Result.Error -> {
                         showLoading(false)
 
@@ -229,8 +207,69 @@ class AddCategoryActivity : AppCompatActivity() {
                             notificationHelper.showProgressNotification(progressValue)
                         }
                     }
+                    is Result.Success -> {
+                        showLoading(false)
+                        hideKeyboard()
+                        makeToast(this, "Success Creating Category")
+                        val notificationIntent = Intent(this, CategoryDetailActivity::class.java)
+                        notificationIntent.putExtra(BOX, model)
+
+                        val pendingIntent = TaskStackBuilder.create(this).run {
+                            addNextIntentWithParentStack(notificationIntent)
+                            getPendingIntent(
+                                0,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                            )
+                        }
+
+                        notificationHelper.dismissNotification()
+                        notificationHelper.updateNotification("Your Category Box's is ready!", pendingIntent)
+
+                        onBackPressedDispatcher.onBackPressed()
+                    }
                 }
             }
+//            viewModel.postCategory(uid , compressedImg , model) { result->
+//                when (result) {
+//                    is Result.Success -> {
+//                        showLoading(false)
+//
+//                        hideKeyboard()
+//
+//                        makeToast(this, "Success Creating Category")
+//
+//                        val notificationIntent = Intent(this, CategoryDetailActivity::class.java)
+//                        notificationIntent.putExtra(BOX, result.data)
+//
+//                        val pendingIntent = TaskStackBuilder.create(this).run {
+//                            addNextIntentWithParentStack(notificationIntent)
+//                            getPendingIntent(
+//                                0,
+//                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+//                            )
+//                        }
+//
+//                        notificationHelper.dismissNotification()
+//                        notificationHelper.updateNotification("Your Category Box's is ready!", pendingIntent)
+//
+//                        onBackPressedDispatcher.onBackPressed()
+//                    }
+//                    is Result.Error -> {
+//                        showLoading(false)
+//
+//                        notificationHelper.dismissNotification()
+//                        notificationHelper.failureNotification(result.error)
+//
+//                        makeToast(this, result.error)
+//                    }
+//                    is Result.Loading -> {
+//                        showLoading(true)
+//                        viewModel.uploadProgress.observe(this@AddCategoryActivity){ progressValue->
+//                            notificationHelper.showProgressNotification(progressValue)
+//                        }
+//                    }
+//                }
+//            }
         } else if (getFile == null) {
             binding.profilePicture3.setBackgroundColor(ContextCompat.getColor(this@AddCategoryActivity , com.google.android.material.R.color.design_default_color_error))
             makeToast(this, "Sorry,but Image cannot be empty for now")

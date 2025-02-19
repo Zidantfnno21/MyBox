@@ -18,6 +18,9 @@ interface DetailsBoxDao {
     @Query("SELECT * FROM Details where id = :boxId")
     fun getDetailsById(boxId: Int) : LiveData<DetailModel>
 
+    @Query("SELECT * FROM Details where id = :boxId AND categoryId = :categoryId")
+    fun getDetailsByCategoryIdAndIds(categoryId: Int, boxId: Int) : LiveData<DetailModel>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDetails(detail : List<DetailModel>)
 

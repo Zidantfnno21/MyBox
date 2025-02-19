@@ -16,17 +16,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.mybox.data.Result
 import com.example.mybox.data.model.DetailModel
 import com.example.mybox.databinding.ActivityDetailItemBinding
-import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.addItemScreen.AddItemActivity
 import com.example.mybox.utils.DETAIL_ID
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.PreferencesHelper
 import com.example.mybox.utils.convertTimestampToISOString
+import javax.inject.Inject
 
 class DetailItemActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
     private lateinit var binding: ActivityDetailItemBinding
-    private val viewModel by viewModels<DetailItemViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private val viewModel: DetailItemViewModel by viewModels()
     private lateinit var detailItem: DetailModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +63,7 @@ class DetailItemActivity : AppCompatActivity() {
     }
 
     private fun fetchData() {
-        val uid = SharedPreferences().getSavedUsername(this)
+        val uid = preferencesHelper.getSavedUsername()
         val id = detailItem.id
         val categoryId = detailItem.categoryId
 

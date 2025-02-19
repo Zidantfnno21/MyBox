@@ -4,12 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mybox.data.BoxRepository
 import com.example.mybox.data.Result
 import com.example.mybox.data.model.DetailModel
+import com.example.mybox.data.repository.BoxRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddItemViewModel(private val boxRepository : BoxRepository) : ViewModel() {
+class AddItemViewModel @Inject constructor(private val boxRepository : BoxRepository) : ViewModel() {
     private val _uploadProgress = boxRepository.uploadProgress
     val uploadProgress: LiveData<Int>
         get() = _uploadProgress

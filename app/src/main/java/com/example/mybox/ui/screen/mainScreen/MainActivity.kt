@@ -1,5 +1,6 @@
-package com.example.mybox.ui.mainScreen
+package com.example.mybox.ui.screen.mainScreen
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -36,33 +37,36 @@ import com.example.mybox.data.Result
 import com.example.mybox.data.model.CategoryModel
 import com.example.mybox.databinding.ActivityMainBinding
 import com.example.mybox.settings.SettingsActivity
-import com.example.mybox.ui.ViewModelFactory
 import com.example.mybox.ui.addCategoryScreen.AddCategoryActivity
 import com.example.mybox.ui.detailScreen.CategoryDetailActivity
 import com.example.mybox.utils.BOX
 import com.example.mybox.utils.BOX_ID
 import com.example.mybox.utils.Event
 import com.example.mybox.utils.PermissionHandler
-import com.example.mybox.utils.SharedPreferences
+import com.example.mybox.utils.PreferencesHelper
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.math.abs
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
+
     private lateinit var binding : ActivityMainBinding
     private val permissionHandler = PermissionHandler(this)
     private lateinit var mainAdapter : MainScreenAdapter
-    private val viewModel by viewModels<MainViewModel> {
-        ViewModelFactory.getInstance(application)
-    }
+    private val viewModel: MainViewModel by viewModels()
     private val uid: String by lazy {
         try {
-            SharedPreferences().getSavedUsername(this@MainActivity)
+            preferencesHelper.getSavedUsername()
         } catch (e: Exception) {
             e.printStackTrace()
-            "username" // Provide a default value or handle the exception as per your requirements
+            "username"
         }
     }
 
@@ -102,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         binding.tvGreetings.text = getString(R.string.greetings, username)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -111,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         permissionHandler.requestPermissionsIfNecessary()
 
-        if (!SharedPreferences().isViewVisible(applicationContext)) {
+        if (!preferencesHelper.isViewVisible()) {
             binding.disposableCardView.isVisible = false
         }
 
@@ -147,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.closeIv.setOnClickListener {
             binding.disposableCardView.isVisible = false
-            SharedPreferences().saveState(false , applicationContext)
+            preferencesHelper.saveState(false)
 
             val params = binding.rvMainPage.layoutParams as ConstraintLayout.LayoutParams
             binding.rvMainPage.layoutParams = params
@@ -167,7 +172,7 @@ class MainActivity : AppCompatActivity() {
         binding.rvMainPage.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = mainAdapter
-            mainAdapter.viewState = SharedPreferences().getView(this@MainActivity)
+            mainAdapter.viewState = preferencesHelper.getView()
 
             val space = 16
             addItemDecoration(object : RecyclerView.ItemDecoration() {
@@ -186,8 +191,9 @@ class MainActivity : AppCompatActivity() {
 
         val gridClickListener = View.OnClickListener {
             mainAdapter.viewState = (mainAdapter.viewState + 1) % 2
+            mainAdapter.notifyDataSetChanged()
 
-            SharedPreferences().saveViewState(mainAdapter.viewState, this)
+            preferencesHelper.saveViewState(mainAdapter.viewState)
 
             val icon = if (mainAdapter.viewState == 0) R.drawable.ic_list_view_24 else R.drawable.ic_card_view_24
             binding.toolbarBtnChangeGrid.setIconResource(icon)
@@ -433,7 +439,7 @@ class MainActivity : AppCompatActivity() {
 
                     }
                     is Result.Error -> {
-                        viewModel.retryOrLogout(uid, this)
+                        viewModel.retryOrLogout(uid)
                         showLoading(false)
                         Toast.makeText(this@MainActivity , getString(R.string.failed_fetch) , Toast.LENGTH_SHORT).show()
                     }
@@ -441,7 +447,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun settings() {
         val intent = Intent(this@MainActivity, SettingsActivity::class.java)

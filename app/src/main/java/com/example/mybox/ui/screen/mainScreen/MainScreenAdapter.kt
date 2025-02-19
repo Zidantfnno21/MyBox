@@ -1,4 +1,4 @@
-package com.example.mybox.ui.mainScreen
+package com.example.mybox.ui.screen.mainScreen
 
 import android.view.LayoutInflater
 import android.view.View

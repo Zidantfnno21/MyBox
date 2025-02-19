@@ -8,7 +8,6 @@
     android:focusable="true"
     android:clipToOutline="true"
     style="@style/CardView"
-    android:layout_marginHorizontal="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="s">
